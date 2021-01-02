@@ -202,6 +202,7 @@ class cell:
         self.vertex_neighbours = []
         self.surface_neighbours = []
         self.boundaryTag = False
+        self.flowField = np.zeros(4)
     
     def add_surfaces(self, surface_index):
         """ Method that adds a surface for the cell
@@ -224,12 +225,14 @@ class Mesh:
     """
         Class that stores relevant information of the whole mesh
         
-        Being used to store information for mesh consisting of quadrilateral elements
+        The mesh defined must be a structured, uniform (no grading!) 2D mesh
     """
 
 
-    def __init__(self, mesh_file):
+    def __init__(self, mesh_file, dx, dy):
         # MAIN ATTRIBUTES
+        self.dx = dx
+        self.dy = dy
         self.vertices = [] 
         self.surfaces = []
         self.cells = []
@@ -395,6 +398,73 @@ class Mesh:
 
         # Surface is not present
         return -1
+
+
+    def vanLeerLimx(self, cellIndex):
+        """
+            UNTESTED
+
+            Function that implements van Leer's one-parameter family of the minmod limiters
+            to limit (prevent) numerical oscillations for the x-direction. 
+
+            Args:
+                self (Mesh) : 
+                cellIndex (int) : the index of the cell for which we want to calculate
+
+            Returns:
+                flowField (ndarray(4,)) : the "limited" partial derivative of flowField in the 
+                                          x-direction
+        """
+        # Arbitrarily taking the value of theta to be 1.25
+        theta = 1.25
+
+        # field_ : flowField of the current cell
+        # fieldN : flowField of the N cell
+        # fieldS : flowField of the S cell 
+        field_ = self.cells[cellIndex].flowField
+        fieldN = self.cells[self.cells[surface_neighbours][2]].flowField
+        fieldS = self.cells[self.cells[surface_neighbours][0]].flowField
+
+        # Calculating input for minmod
+        var1 = theta * (fieldN - field_)/self.dx
+        var2 = (fieldN - fieldS)/(2*self.dx)
+        var3 = theta * (field_ - fieldS)/self.dx
+
+        return minmod(var1, var2, var3)
+
+
+    def vanLeerLimy(self, cellIndex):
+        """
+            UNTESTED
+
+            Function that implements van Leer's one-parameter family of the minmod limiters
+            to limit (prevent) numerical oscillations for the y-direction. 
+
+            Args:
+                self (Mesh) : 
+                cellIndex (int) : the index of the cell for which we want to calculate
+                dy (float) : mesh cell size
+
+            Returns:
+                flowField (ndarray(4,)) : the "limited" partial derivative of flowField in the 
+                                          y-direction
+        """
+        # Arbitrarily taking the value of theta to be 1.25
+        theta = 1.25
+
+        # field_ : flowField of the current cell
+        # fieldW : flowField of the W cell
+        # fieldE : flowField of the E cell 
+        field_ = self.cells[cellIndex].flowField
+        fieldW = self.cells[self.cells[surface_neighbours][3]].flowField
+        fieldE = self.cells[self.cells[surface_neighbours][1]].flowField
+
+        # Calculating input for minmod
+        var1 = theta * (fieldW - field_)/self.dy
+        var2 = (fieldW - fieldE)/(2*self.dy)
+        var3 = theta * (field_ - fieldE)/self.dy
+
+        return minmod(var1, var2, var3)
 
 
 
