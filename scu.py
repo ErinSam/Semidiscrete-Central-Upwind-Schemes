@@ -469,6 +469,80 @@ class Mesh:
 
         return vll.minmod(var1, var2, var3)
 
+    def cellNorth(self, cellIndex):
+        """
+            Function returns the flowField of the cell above the cell of the cellIndex
+
+            Args:
+                self (Mesh) : 
+                cellIndex (int) : index of the present cell
+
+            Returns:
+                field (ndarray(4,)) : flowField of the north cell
+        """
+        # Derivative
+        derivative = self.vanLeerLimy(cellIndex)
+        # Calculating the final 
+        field = self.cells[cellIndex].flowField + self.dy/2 * derivative
+
+        return field 
+
+
+    def cellSouth(self, cellIndex):
+        """
+            Function returns the flowField of the cell below the cell of the cellIndex
+
+            Args:
+                self (Mesh) : 
+                cellIndex (int) : index of the present cell
+
+            Returns:
+                field (ndarray(4,)) : flowField of the north cell
+        """
+        # Derivative
+        derivative = self.vanLeerLimy(cellIndex)
+        # Calculating the final 
+        field = self.cells[cellIndex].flowField - self.dy/2 * derivative
+
+        return field 
+
+
+    def cellWest(self, cellIndex):
+        """
+            Function returns the flowField of the cell to the left of the cell of the cellIndex
+
+            Args:
+                self (Mesh) : 
+                cellIndex (int) : index of the present cell
+
+            Returns:
+                field (ndarray(4,)) : flowField of the north cell
+        """
+        # Derivative
+        derivative = self.vanLeerLimx(cellIndex)
+        # Calculating the final 
+        field = self.cells[cellIndex].flowField - self.dx/2 * derivative
+
+        return field 
+
+
+    def cellEast(self, cellIndex):
+        """
+            Function returns the flowField of the cell to the right of the cell of the cellIndex
+
+            Args:
+                self (Mesh) : 
+                cellIndex (int) : index of the present cell
+
+            Returns:
+                field (ndarray(4,)) : flowField of the north cell
+        """
+        # Derivative
+        derivative = self.vanLeerLimx(cellIndex)
+        # Calculating the final 
+        field = self.cells[cellIndex].flowField + self.dx/2 * derivative
+
+        return field 
 
 
 if __name__ == "__main__":
