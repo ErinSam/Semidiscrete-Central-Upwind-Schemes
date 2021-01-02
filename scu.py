@@ -16,6 +16,9 @@ import meshio
 sys.path.append('./../Mesh-Handlers-and-Pre-Processing/Topology')
 import cartesian_geom as cgm
 
+import minmodForVLLim as vll
+import fluxRelated as frtd
+
 
 
 class vertex:
@@ -430,7 +433,7 @@ class Mesh:
         var2 = (fieldN - fieldS)/(2*self.dx)
         var3 = theta * (field_ - fieldS)/self.dx
 
-        return minmod(var1, var2, var3)
+        return vll.minmod(var1, var2, var3)
 
 
     def vanLeerLimy(self, cellIndex):
@@ -464,7 +467,7 @@ class Mesh:
         var2 = (fieldW - fieldE)/(2*self.dy)
         var3 = theta * (field_ - fieldE)/self.dy
 
-        return minmod(var1, var2, var3)
+        return vll.minmod(var1, var2, var3)
 
 
 
