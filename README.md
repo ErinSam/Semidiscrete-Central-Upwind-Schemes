@@ -4,9 +4,10 @@ Semidiscrete central upwind schemes for the compressible Euler Equations. Allows
 # <sub><sub>Mesh Reading Capability</sub></sub>
 The main python script is capable of reading in a mesh, defined by Gmsh's [3] .msh (v4) file format.
 Mesh topology data required for the scheme is obtained from the file and stored in the Mesh class. 
-<br />
+<br /><br />
 Following is output from the terminal to show this capability. Boundary cell indices have been 
 chosen as the standard as they rely on all previous topology data to have been collected correctly.
+<br /><br />
 ![](images/boundaryCellReading.png)
 
 # <sub><sub>References</sub></sub>
