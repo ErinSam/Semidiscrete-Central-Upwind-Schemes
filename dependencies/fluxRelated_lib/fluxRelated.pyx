@@ -17,7 +17,7 @@ cimport cython
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cpdef eigvalMaxMinF(np.ndarray[double, ndim=1] U, minmax="max"):
+cpdef eigvalMaxMinF(np.ndarray[double, ndim=1] U, bint minim=False):
     """
         Function that finds the maximum or the minimum eigenvalue (based on choice) of 
         the Jacobian matrix of the x-direction flux term for Compressible 2D Euler 
@@ -48,7 +48,7 @@ cpdef eigvalMaxMinF(np.ndarray[double, ndim=1] U, minmax="max"):
 
     # Obtaining the max or the min of the eigenvalue
     cdef np.ndarray[double, ndim=1] eigvals = np.linalg.eigvals(jacb)
-    if ( minmax == "min" ):
+    if ( minim ):
         return eigvals.min()
     else:
         return eigvals.max()
@@ -56,7 +56,7 @@ cpdef eigvalMaxMinF(np.ndarray[double, ndim=1] U, minmax="max"):
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cpdef eigvalMaxMinG(np.ndarray[double, ndim=1] U, minmax="max"):
+cpdef eigvalMaxMinG(np.ndarray[double, ndim=1] U, bint minim=False):
     """
         Function that finds the maximum or the minimum eigenvalue (based on choice) of 
         the Jacobian matrix of the y-direction flux term for Compressible 2D Euler 
@@ -91,7 +91,7 @@ cpdef eigvalMaxMinG(np.ndarray[double, ndim=1] U, minmax="max"):
 
     # Obtaining the max or the min of the eigenvalue
     cdef np.ndarray[double, ndim=1] eigvals = np.linalg.eigvals(jacb)
-    if ( minmax == "min" ):
+    if ( minim ):
         return eigvals.min()
     else:
         return eigvals.max()

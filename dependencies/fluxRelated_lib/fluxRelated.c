@@ -1152,25 +1152,25 @@ struct __pyx_opt_args_11fluxRelated_eigvalMaxMinG;
 /* "fluxRelated.pyx":20
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * cpdef eigvalMaxMinF(np.ndarray[double, ndim=1] U, minmax="max"):             # <<<<<<<<<<<<<<
+ * cpdef eigvalMaxMinF(np.ndarray[double, ndim=1] U, bint minim=False):             # <<<<<<<<<<<<<<
  *     """
  *         Function that finds the maximum or the minimum eigenvalue (based on choice) of
  */
 struct __pyx_opt_args_11fluxRelated_eigvalMaxMinF {
   int __pyx_n;
-  PyObject *minmax;
+  int minim;
 };
 
 /* "fluxRelated.pyx":59
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * cpdef eigvalMaxMinG(np.ndarray[double, ndim=1] U, minmax="max"):             # <<<<<<<<<<<<<<
+ * cpdef eigvalMaxMinG(np.ndarray[double, ndim=1] U, bint minim=False):             # <<<<<<<<<<<<<<
  *     """
  *         Function that finds the maximum or the minimum eigenvalue (based on choice) of
  */
 struct __pyx_opt_args_11fluxRelated_eigvalMaxMinG {
   int __pyx_n;
-  PyObject *minmax;
+  int minim;
 };
 
 /* --- Runtime support code (head) --- */
@@ -1366,22 +1366,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObjec
 
 /* ExtTypeTest.proto */
 static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type);
-
-/* IncludeStringH.proto */
-#include <string.h>
-
-/* BytesEquals.proto */
-static CYTHON_INLINE int __Pyx_PyBytes_Equals(PyObject* s1, PyObject* s2, int equals);
-
-/* UnicodeEquals.proto */
-static CYTHON_INLINE int __Pyx_PyUnicode_Equals(PyObject* s1, PyObject* s2, int equals);
-
-/* StrEquals.proto */
-#if PY_MAJOR_VERSION >= 3
-#define __Pyx_PyString_Equals __Pyx_PyUnicode_Equals
-#else
-#define __Pyx_PyString_Equals __Pyx_PyBytes_Equals
-#endif
 
 /* PyObjectCallNoArg.proto */
 #if CYTHON_COMPILING_IN_CPYTHON
@@ -1724,11 +1708,11 @@ static const char __pyx_k_math[] = "math";
 static const char __pyx_k_name[] = "__name__";
 static const char __pyx_k_test[] = "__test__";
 static const char __pyx_k_array[] = "array";
+static const char __pyx_k_minim[] = "minim";
 static const char __pyx_k_numpy[] = "numpy";
 static const char __pyx_k_zeros[] = "zeros";
 static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_linalg[] = "linalg";
-static const char __pyx_k_minmax[] = "minmax";
 static const char __pyx_k_eigvals[] = "eigvals";
 static const char __pyx_k_ImportError[] = "ImportError";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
@@ -1747,7 +1731,7 @@ static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_math;
 static PyObject *__pyx_n_s_max;
 static PyObject *__pyx_n_s_min;
-static PyObject *__pyx_n_s_minmax;
+static PyObject *__pyx_n_s_minim;
 static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_np;
 static PyObject *__pyx_n_s_numpy;
@@ -1755,8 +1739,8 @@ static PyObject *__pyx_kp_s_numpy_core_multiarray_failed_to;
 static PyObject *__pyx_kp_s_numpy_core_umath_failed_to_impor;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_zeros;
-static PyObject *__pyx_pf_11fluxRelated_eigvalMaxMinF(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_U, PyObject *__pyx_v_minmax); /* proto */
-static PyObject *__pyx_pf_11fluxRelated_2eigvalMaxMinG(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_U, PyObject *__pyx_v_minmax); /* proto */
+static PyObject *__pyx_pf_11fluxRelated_eigvalMaxMinF(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_U, int __pyx_v_minim); /* proto */
+static PyObject *__pyx_pf_11fluxRelated_2eigvalMaxMinG(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_U, int __pyx_v_minim); /* proto */
 static PyObject *__pyx_pf_11fluxRelated_4fluxF(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_U); /* proto */
 static PyObject *__pyx_pf_11fluxRelated_6fluxG(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_U); /* proto */
 static PyObject *__pyx_float_0_5;
@@ -1771,14 +1755,14 @@ static PyObject *__pyx_tuple__2;
 /* "fluxRelated.pyx":20
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * cpdef eigvalMaxMinF(np.ndarray[double, ndim=1] U, minmax="max"):             # <<<<<<<<<<<<<<
+ * cpdef eigvalMaxMinF(np.ndarray[double, ndim=1] U, bint minim=False):             # <<<<<<<<<<<<<<
  *     """
  *         Function that finds the maximum or the minimum eigenvalue (based on choice) of
  */
 
 static PyObject *__pyx_pw_11fluxRelated_1eigvalMaxMinF(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static PyObject *__pyx_f_11fluxRelated_eigvalMaxMinF(PyArrayObject *__pyx_v_U, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_11fluxRelated_eigvalMaxMinF *__pyx_optional_args) {
-  PyObject *__pyx_v_minmax = ((PyObject *)__pyx_n_s_max);
+  int __pyx_v_minim = ((int)0);
   double __pyx_v_c_ratio;
   double __pyx_v_c_;
   double __pyx_v_u1;
@@ -1821,7 +1805,7 @@ static PyObject *__pyx_f_11fluxRelated_eigvalMaxMinF(PyArrayObject *__pyx_v_U, C
   __Pyx_RefNannySetupContext("eigvalMaxMinF", 0);
   if (__pyx_optional_args) {
     if (__pyx_optional_args->__pyx_n > 0) {
-      __pyx_v_minmax = __pyx_optional_args->minmax;
+      __pyx_v_minim = __pyx_optional_args->minim;
     }
   }
   __pyx_pybuffer_jacb.pybuffer.buf = NULL;
@@ -2157,7 +2141,7 @@ static PyObject *__pyx_f_11fluxRelated_eigvalMaxMinF(PyArrayObject *__pyx_v_U, C
  * 
  *     # Obtaining the max or the min of the eigenvalue
  *     cdef np.ndarray[double, ndim=1] eigvals = np.linalg.eigvals(jacb)             # <<<<<<<<<<<<<<
- *     if ( minmax == "min" ):
+ *     if ( minim ):
  *         return eigvals.min()
  */
   __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 50, __pyx_L1_error)
@@ -2200,16 +2184,16 @@ static PyObject *__pyx_f_11fluxRelated_eigvalMaxMinF(PyArrayObject *__pyx_v_U, C
   /* "fluxRelated.pyx":51
  *     # Obtaining the max or the min of the eigenvalue
  *     cdef np.ndarray[double, ndim=1] eigvals = np.linalg.eigvals(jacb)
- *     if ( minmax == "min" ):             # <<<<<<<<<<<<<<
+ *     if ( minim ):             # <<<<<<<<<<<<<<
  *         return eigvals.min()
  *     else:
  */
-  __pyx_t_20 = (__Pyx_PyString_Equals(__pyx_v_minmax, __pyx_n_s_min, Py_EQ)); if (unlikely(__pyx_t_20 < 0)) __PYX_ERR(0, 51, __pyx_L1_error)
+  __pyx_t_20 = (__pyx_v_minim != 0);
   if (__pyx_t_20) {
 
     /* "fluxRelated.pyx":52
  *     cdef np.ndarray[double, ndim=1] eigvals = np.linalg.eigvals(jacb)
- *     if ( minmax == "min" ):
+ *     if ( minim ):
  *         return eigvals.min()             # <<<<<<<<<<<<<<
  *     else:
  *         return eigvals.max()
@@ -2239,7 +2223,7 @@ static PyObject *__pyx_f_11fluxRelated_eigvalMaxMinF(PyArrayObject *__pyx_v_U, C
     /* "fluxRelated.pyx":51
  *     # Obtaining the max or the min of the eigenvalue
  *     cdef np.ndarray[double, ndim=1] eigvals = np.linalg.eigvals(jacb)
- *     if ( minmax == "min" ):             # <<<<<<<<<<<<<<
+ *     if ( minim ):             # <<<<<<<<<<<<<<
  *         return eigvals.min()
  *     else:
  */
@@ -2279,7 +2263,7 @@ static PyObject *__pyx_f_11fluxRelated_eigvalMaxMinF(PyArrayObject *__pyx_v_U, C
   /* "fluxRelated.pyx":20
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * cpdef eigvalMaxMinF(np.ndarray[double, ndim=1] U, minmax="max"):             # <<<<<<<<<<<<<<
+ * cpdef eigvalMaxMinF(np.ndarray[double, ndim=1] U, bint minim=False):             # <<<<<<<<<<<<<<
  *     """
  *         Function that finds the maximum or the minimum eigenvalue (based on choice) of
  */
@@ -2324,7 +2308,7 @@ static PyObject *__pyx_pw_11fluxRelated_1eigvalMaxMinF(PyObject *__pyx_self, PyO
 static char __pyx_doc_11fluxRelated_eigvalMaxMinF[] = "\n        Function that finds the maximum or the minimum eigenvalue (based on choice) of \n        the Jacobian matrix of the x-direction flux term for Compressible 2D Euler \n        Equations. Eigenvalues of \\partial F/ \\partial U. \n\n        Args:\n            U (ndarray(4,)) : conserved flow field variables \n            minmax (str) : whether to provide max. or min. eigenvalue of the Jacobian\n\n        Returns: \n            eval (float) : max. or min. eigenvalue of the Jacobian\n    ";
 static PyObject *__pyx_pw_11fluxRelated_1eigvalMaxMinF(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_U = 0;
-  PyObject *__pyx_v_minmax = 0;
+  int __pyx_v_minim;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -2332,9 +2316,8 @@ static PyObject *__pyx_pw_11fluxRelated_1eigvalMaxMinF(PyObject *__pyx_self, PyO
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("eigvalMaxMinF (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_U,&__pyx_n_s_minmax,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_U,&__pyx_n_s_minim,0};
     PyObject* values[2] = {0,0};
-    values[1] = ((PyObject *)__pyx_n_s_max);
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -2354,7 +2337,7 @@ static PyObject *__pyx_pw_11fluxRelated_1eigvalMaxMinF(PyObject *__pyx_self, PyO
         CYTHON_FALLTHROUGH;
         case  1:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_minmax);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_minim);
           if (value) { values[1] = value; kw_args--; }
         }
       }
@@ -2371,7 +2354,11 @@ static PyObject *__pyx_pw_11fluxRelated_1eigvalMaxMinF(PyObject *__pyx_self, PyO
       }
     }
     __pyx_v_U = ((PyArrayObject *)values[0]);
-    __pyx_v_minmax = values[1];
+    if (values[1]) {
+      __pyx_v_minim = __Pyx_PyObject_IsTrue(values[1]); if (unlikely((__pyx_v_minim == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 20, __pyx_L3_error)
+    } else {
+      __pyx_v_minim = ((int)0);
+    }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -2382,7 +2369,7 @@ static PyObject *__pyx_pw_11fluxRelated_1eigvalMaxMinF(PyObject *__pyx_self, PyO
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_U), __pyx_ptype_5numpy_ndarray, 1, "U", 0))) __PYX_ERR(0, 20, __pyx_L1_error)
-  __pyx_r = __pyx_pf_11fluxRelated_eigvalMaxMinF(__pyx_self, __pyx_v_U, __pyx_v_minmax);
+  __pyx_r = __pyx_pf_11fluxRelated_eigvalMaxMinF(__pyx_self, __pyx_v_U, __pyx_v_minim);
 
   /* function exit code */
   goto __pyx_L0;
@@ -2393,7 +2380,7 @@ static PyObject *__pyx_pw_11fluxRelated_1eigvalMaxMinF(PyObject *__pyx_self, PyO
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11fluxRelated_eigvalMaxMinF(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_U, PyObject *__pyx_v_minmax) {
+static PyObject *__pyx_pf_11fluxRelated_eigvalMaxMinF(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_U, int __pyx_v_minim) {
   __Pyx_LocalBuf_ND __pyx_pybuffernd_U;
   __Pyx_Buffer __pyx_pybuffer_U;
   PyObject *__pyx_r = NULL;
@@ -2415,7 +2402,7 @@ static PyObject *__pyx_pf_11fluxRelated_eigvalMaxMinF(CYTHON_UNUSED PyObject *__
   __pyx_pybuffernd_U.diminfo[0].strides = __pyx_pybuffernd_U.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_U.diminfo[0].shape = __pyx_pybuffernd_U.rcbuffer->pybuffer.shape[0];
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_2.__pyx_n = 1;
-  __pyx_t_2.minmax = __pyx_v_minmax;
+  __pyx_t_2.minim = __pyx_v_minim;
   __pyx_t_1 = __pyx_f_11fluxRelated_eigvalMaxMinF(__pyx_v_U, 0, &__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 20, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
@@ -2445,14 +2432,14 @@ static PyObject *__pyx_pf_11fluxRelated_eigvalMaxMinF(CYTHON_UNUSED PyObject *__
 /* "fluxRelated.pyx":59
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * cpdef eigvalMaxMinG(np.ndarray[double, ndim=1] U, minmax="max"):             # <<<<<<<<<<<<<<
+ * cpdef eigvalMaxMinG(np.ndarray[double, ndim=1] U, bint minim=False):             # <<<<<<<<<<<<<<
  *     """
  *         Function that finds the maximum or the minimum eigenvalue (based on choice) of
  */
 
 static PyObject *__pyx_pw_11fluxRelated_3eigvalMaxMinG(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static PyObject *__pyx_f_11fluxRelated_eigvalMaxMinG(PyArrayObject *__pyx_v_U, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_11fluxRelated_eigvalMaxMinG *__pyx_optional_args) {
-  PyObject *__pyx_v_minmax = ((PyObject *)__pyx_n_s_max);
+  int __pyx_v_minim = ((int)0);
   double __pyx_v_c_ratio;
   double __pyx_v_c_;
   double __pyx_v_u1;
@@ -2495,7 +2482,7 @@ static PyObject *__pyx_f_11fluxRelated_eigvalMaxMinG(PyArrayObject *__pyx_v_U, C
   __Pyx_RefNannySetupContext("eigvalMaxMinG", 0);
   if (__pyx_optional_args) {
     if (__pyx_optional_args->__pyx_n > 0) {
-      __pyx_v_minmax = __pyx_optional_args->minmax;
+      __pyx_v_minim = __pyx_optional_args->minim;
     }
   }
   __pyx_pybuffer_jacb.pybuffer.buf = NULL;
@@ -2871,7 +2858,7 @@ static PyObject *__pyx_f_11fluxRelated_eigvalMaxMinG(PyArrayObject *__pyx_v_U, C
  * 
  *     # Obtaining the max or the min of the eigenvalue
  *     cdef np.ndarray[double, ndim=1] eigvals = np.linalg.eigvals(jacb)             # <<<<<<<<<<<<<<
- *     if ( minmax == "min" ):
+ *     if ( minim ):
  *         return eigvals.min()
  */
   __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 93, __pyx_L1_error)
@@ -2914,16 +2901,16 @@ static PyObject *__pyx_f_11fluxRelated_eigvalMaxMinG(PyArrayObject *__pyx_v_U, C
   /* "fluxRelated.pyx":94
  *     # Obtaining the max or the min of the eigenvalue
  *     cdef np.ndarray[double, ndim=1] eigvals = np.linalg.eigvals(jacb)
- *     if ( minmax == "min" ):             # <<<<<<<<<<<<<<
+ *     if ( minim ):             # <<<<<<<<<<<<<<
  *         return eigvals.min()
  *     else:
  */
-  __pyx_t_20 = (__Pyx_PyString_Equals(__pyx_v_minmax, __pyx_n_s_min, Py_EQ)); if (unlikely(__pyx_t_20 < 0)) __PYX_ERR(0, 94, __pyx_L1_error)
+  __pyx_t_20 = (__pyx_v_minim != 0);
   if (__pyx_t_20) {
 
     /* "fluxRelated.pyx":95
  *     cdef np.ndarray[double, ndim=1] eigvals = np.linalg.eigvals(jacb)
- *     if ( minmax == "min" ):
+ *     if ( minim ):
  *         return eigvals.min()             # <<<<<<<<<<<<<<
  *     else:
  *         return eigvals.max()
@@ -2953,7 +2940,7 @@ static PyObject *__pyx_f_11fluxRelated_eigvalMaxMinG(PyArrayObject *__pyx_v_U, C
     /* "fluxRelated.pyx":94
  *     # Obtaining the max or the min of the eigenvalue
  *     cdef np.ndarray[double, ndim=1] eigvals = np.linalg.eigvals(jacb)
- *     if ( minmax == "min" ):             # <<<<<<<<<<<<<<
+ *     if ( minim ):             # <<<<<<<<<<<<<<
  *         return eigvals.min()
  *     else:
  */
@@ -2993,7 +2980,7 @@ static PyObject *__pyx_f_11fluxRelated_eigvalMaxMinG(PyArrayObject *__pyx_v_U, C
   /* "fluxRelated.pyx":59
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * cpdef eigvalMaxMinG(np.ndarray[double, ndim=1] U, minmax="max"):             # <<<<<<<<<<<<<<
+ * cpdef eigvalMaxMinG(np.ndarray[double, ndim=1] U, bint minim=False):             # <<<<<<<<<<<<<<
  *     """
  *         Function that finds the maximum or the minimum eigenvalue (based on choice) of
  */
@@ -3038,7 +3025,7 @@ static PyObject *__pyx_pw_11fluxRelated_3eigvalMaxMinG(PyObject *__pyx_self, PyO
 static char __pyx_doc_11fluxRelated_2eigvalMaxMinG[] = "\n        Function that finds the maximum or the minimum eigenvalue (based on choice) of \n        the Jacobian matrix of the y-direction flux term for Compressible 2D Euler \n        Equations. Eigenvalues of \\partial G/ \\partial U. \n\n        Args:\n            U (ndarray(4,)) : conserved flow field variables \n            minmax (str) : whether to provide max. or min. eigenvalue of the Jacobian\n\n        Returns: \n            eval (float) : max. or min. eigenvalue of the Jacobian\n    ";
 static PyObject *__pyx_pw_11fluxRelated_3eigvalMaxMinG(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_U = 0;
-  PyObject *__pyx_v_minmax = 0;
+  int __pyx_v_minim;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -3046,9 +3033,8 @@ static PyObject *__pyx_pw_11fluxRelated_3eigvalMaxMinG(PyObject *__pyx_self, PyO
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("eigvalMaxMinG (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_U,&__pyx_n_s_minmax,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_U,&__pyx_n_s_minim,0};
     PyObject* values[2] = {0,0};
-    values[1] = ((PyObject *)__pyx_n_s_max);
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -3068,7 +3054,7 @@ static PyObject *__pyx_pw_11fluxRelated_3eigvalMaxMinG(PyObject *__pyx_self, PyO
         CYTHON_FALLTHROUGH;
         case  1:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_minmax);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_minim);
           if (value) { values[1] = value; kw_args--; }
         }
       }
@@ -3085,7 +3071,11 @@ static PyObject *__pyx_pw_11fluxRelated_3eigvalMaxMinG(PyObject *__pyx_self, PyO
       }
     }
     __pyx_v_U = ((PyArrayObject *)values[0]);
-    __pyx_v_minmax = values[1];
+    if (values[1]) {
+      __pyx_v_minim = __Pyx_PyObject_IsTrue(values[1]); if (unlikely((__pyx_v_minim == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 59, __pyx_L3_error)
+    } else {
+      __pyx_v_minim = ((int)0);
+    }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -3096,7 +3086,7 @@ static PyObject *__pyx_pw_11fluxRelated_3eigvalMaxMinG(PyObject *__pyx_self, PyO
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_U), __pyx_ptype_5numpy_ndarray, 1, "U", 0))) __PYX_ERR(0, 59, __pyx_L1_error)
-  __pyx_r = __pyx_pf_11fluxRelated_2eigvalMaxMinG(__pyx_self, __pyx_v_U, __pyx_v_minmax);
+  __pyx_r = __pyx_pf_11fluxRelated_2eigvalMaxMinG(__pyx_self, __pyx_v_U, __pyx_v_minim);
 
   /* function exit code */
   goto __pyx_L0;
@@ -3107,7 +3097,7 @@ static PyObject *__pyx_pw_11fluxRelated_3eigvalMaxMinG(PyObject *__pyx_self, PyO
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11fluxRelated_2eigvalMaxMinG(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_U, PyObject *__pyx_v_minmax) {
+static PyObject *__pyx_pf_11fluxRelated_2eigvalMaxMinG(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_U, int __pyx_v_minim) {
   __Pyx_LocalBuf_ND __pyx_pybuffernd_U;
   __Pyx_Buffer __pyx_pybuffer_U;
   PyObject *__pyx_r = NULL;
@@ -3129,7 +3119,7 @@ static PyObject *__pyx_pf_11fluxRelated_2eigvalMaxMinG(CYTHON_UNUSED PyObject *_
   __pyx_pybuffernd_U.diminfo[0].strides = __pyx_pybuffernd_U.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_U.diminfo[0].shape = __pyx_pybuffernd_U.rcbuffer->pybuffer.shape[0];
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_2.__pyx_n = 1;
-  __pyx_t_2.minmax = __pyx_v_minmax;
+  __pyx_t_2.minim = __pyx_v_minim;
   __pyx_t_1 = __pyx_f_11fluxRelated_eigvalMaxMinG(__pyx_v_U, 0, &__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 59, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
@@ -4888,7 +4878,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_math, __pyx_k_math, sizeof(__pyx_k_math), 0, 0, 1, 1},
   {&__pyx_n_s_max, __pyx_k_max, sizeof(__pyx_k_max), 0, 0, 1, 1},
   {&__pyx_n_s_min, __pyx_k_min, sizeof(__pyx_k_min), 0, 0, 1, 1},
-  {&__pyx_n_s_minmax, __pyx_k_minmax, sizeof(__pyx_k_minmax), 0, 0, 1, 1},
+  {&__pyx_n_s_minim, __pyx_k_minim, sizeof(__pyx_k_minim), 0, 0, 1, 1},
   {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
   {&__pyx_n_s_np, __pyx_k_np, sizeof(__pyx_k_np), 0, 0, 1, 1},
   {&__pyx_n_s_numpy, __pyx_k_numpy, sizeof(__pyx_k_numpy), 0, 0, 1, 1},
@@ -6242,155 +6232,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObjec
     PyErr_Format(PyExc_TypeError, "Cannot convert %.200s to %.200s",
                  Py_TYPE(obj)->tp_name, type->tp_name);
     return 0;
-}
-
-/* BytesEquals */
-  static CYTHON_INLINE int __Pyx_PyBytes_Equals(PyObject* s1, PyObject* s2, int equals) {
-#if CYTHON_COMPILING_IN_PYPY
-    return PyObject_RichCompareBool(s1, s2, equals);
-#else
-    if (s1 == s2) {
-        return (equals == Py_EQ);
-    } else if (PyBytes_CheckExact(s1) & PyBytes_CheckExact(s2)) {
-        const char *ps1, *ps2;
-        Py_ssize_t length = PyBytes_GET_SIZE(s1);
-        if (length != PyBytes_GET_SIZE(s2))
-            return (equals == Py_NE);
-        ps1 = PyBytes_AS_STRING(s1);
-        ps2 = PyBytes_AS_STRING(s2);
-        if (ps1[0] != ps2[0]) {
-            return (equals == Py_NE);
-        } else if (length == 1) {
-            return (equals == Py_EQ);
-        } else {
-            int result;
-#if CYTHON_USE_UNICODE_INTERNALS
-            Py_hash_t hash1, hash2;
-            hash1 = ((PyBytesObject*)s1)->ob_shash;
-            hash2 = ((PyBytesObject*)s2)->ob_shash;
-            if (hash1 != hash2 && hash1 != -1 && hash2 != -1) {
-                return (equals == Py_NE);
-            }
-#endif
-            result = memcmp(ps1, ps2, (size_t)length);
-            return (equals == Py_EQ) ? (result == 0) : (result != 0);
-        }
-    } else if ((s1 == Py_None) & PyBytes_CheckExact(s2)) {
-        return (equals == Py_NE);
-    } else if ((s2 == Py_None) & PyBytes_CheckExact(s1)) {
-        return (equals == Py_NE);
-    } else {
-        int result;
-        PyObject* py_result = PyObject_RichCompare(s1, s2, equals);
-        if (!py_result)
-            return -1;
-        result = __Pyx_PyObject_IsTrue(py_result);
-        Py_DECREF(py_result);
-        return result;
-    }
-#endif
-}
-
-/* UnicodeEquals */
-  static CYTHON_INLINE int __Pyx_PyUnicode_Equals(PyObject* s1, PyObject* s2, int equals) {
-#if CYTHON_COMPILING_IN_PYPY
-    return PyObject_RichCompareBool(s1, s2, equals);
-#else
-#if PY_MAJOR_VERSION < 3
-    PyObject* owned_ref = NULL;
-#endif
-    int s1_is_unicode, s2_is_unicode;
-    if (s1 == s2) {
-        goto return_eq;
-    }
-    s1_is_unicode = PyUnicode_CheckExact(s1);
-    s2_is_unicode = PyUnicode_CheckExact(s2);
-#if PY_MAJOR_VERSION < 3
-    if ((s1_is_unicode & (!s2_is_unicode)) && PyString_CheckExact(s2)) {
-        owned_ref = PyUnicode_FromObject(s2);
-        if (unlikely(!owned_ref))
-            return -1;
-        s2 = owned_ref;
-        s2_is_unicode = 1;
-    } else if ((s2_is_unicode & (!s1_is_unicode)) && PyString_CheckExact(s1)) {
-        owned_ref = PyUnicode_FromObject(s1);
-        if (unlikely(!owned_ref))
-            return -1;
-        s1 = owned_ref;
-        s1_is_unicode = 1;
-    } else if (((!s2_is_unicode) & (!s1_is_unicode))) {
-        return __Pyx_PyBytes_Equals(s1, s2, equals);
-    }
-#endif
-    if (s1_is_unicode & s2_is_unicode) {
-        Py_ssize_t length;
-        int kind;
-        void *data1, *data2;
-        if (unlikely(__Pyx_PyUnicode_READY(s1) < 0) || unlikely(__Pyx_PyUnicode_READY(s2) < 0))
-            return -1;
-        length = __Pyx_PyUnicode_GET_LENGTH(s1);
-        if (length != __Pyx_PyUnicode_GET_LENGTH(s2)) {
-            goto return_ne;
-        }
-#if CYTHON_USE_UNICODE_INTERNALS
-        {
-            Py_hash_t hash1, hash2;
-        #if CYTHON_PEP393_ENABLED
-            hash1 = ((PyASCIIObject*)s1)->hash;
-            hash2 = ((PyASCIIObject*)s2)->hash;
-        #else
-            hash1 = ((PyUnicodeObject*)s1)->hash;
-            hash2 = ((PyUnicodeObject*)s2)->hash;
-        #endif
-            if (hash1 != hash2 && hash1 != -1 && hash2 != -1) {
-                goto return_ne;
-            }
-        }
-#endif
-        kind = __Pyx_PyUnicode_KIND(s1);
-        if (kind != __Pyx_PyUnicode_KIND(s2)) {
-            goto return_ne;
-        }
-        data1 = __Pyx_PyUnicode_DATA(s1);
-        data2 = __Pyx_PyUnicode_DATA(s2);
-        if (__Pyx_PyUnicode_READ(kind, data1, 0) != __Pyx_PyUnicode_READ(kind, data2, 0)) {
-            goto return_ne;
-        } else if (length == 1) {
-            goto return_eq;
-        } else {
-            int result = memcmp(data1, data2, (size_t)(length * kind));
-            #if PY_MAJOR_VERSION < 3
-            Py_XDECREF(owned_ref);
-            #endif
-            return (equals == Py_EQ) ? (result == 0) : (result != 0);
-        }
-    } else if ((s1 == Py_None) & s2_is_unicode) {
-        goto return_ne;
-    } else if ((s2 == Py_None) & s1_is_unicode) {
-        goto return_ne;
-    } else {
-        int result;
-        PyObject* py_result = PyObject_RichCompare(s1, s2, equals);
-        #if PY_MAJOR_VERSION < 3
-        Py_XDECREF(owned_ref);
-        #endif
-        if (!py_result)
-            return -1;
-        result = __Pyx_PyObject_IsTrue(py_result);
-        Py_DECREF(py_result);
-        return result;
-    }
-return_eq:
-    #if PY_MAJOR_VERSION < 3
-    Py_XDECREF(owned_ref);
-    #endif
-    return (equals == Py_EQ);
-return_ne:
-    #if PY_MAJOR_VERSION < 3
-    Py_XDECREF(owned_ref);
-    #endif
-    return (equals == Py_NE);
-#endif
 }
 
 /* PyObjectCallNoArg */
