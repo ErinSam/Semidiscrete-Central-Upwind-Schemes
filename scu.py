@@ -16,7 +16,10 @@ import meshio
 sys.path.append('./../Mesh-Handlers-and-Pre-Processing/Topology')
 import cartesian_geom as cgm
 
+sys.path.append('./dependencies/fluxRelated_lib')
 import minmodForVLLim as vll
+
+sys.path.append('./dependencies/minmodForVLLim_lib')
 import fluxRelated as frtd
 
 
@@ -329,16 +332,16 @@ class Mesh:
         print(green("Completed initialising cell-surface-sharing topology data"))
 
 
-        # INITIALISING CELL-VERTEX-SHARING NIEGHBOURS
-        print(yellow("Initialising cell-vertex-sharing topology data"))
-        for mesh_cell in self.cells:
-            for possible_neighbour in self.cells:
-                for vert_index in mesh_cell.vert_indices:
-                    if ( vert_index in possible_neighbour.vert_indices ):
-                        if ( (possible_neighbour.index != mesh_cell.index) & 
-                             (possible_neighbour.index not in mesh_cell.vertex_neighbours) ):
-                            mesh_cell.add_vertex_neighbours(possible_neighbour.index)
-        print(green("Completed initialising cell-vertex-sharing topology data"))
+#        # INITIALISING CELL-VERTEX-SHARING NIEGHBOURS
+#        print(yellow("Initialising cell-vertex-sharing topology data"))
+#        for mesh_cell in self.cells:
+#            for possible_neighbour in self.cells:
+#                for vert_index in mesh_cell.vert_indices:
+#                    if ( vert_index in possible_neighbour.vert_indices ):
+#                        if ( (possible_neighbour.index != mesh_cell.index) & 
+#                             (possible_neighbour.index not in mesh_cell.vertex_neighbours) ):
+#                            mesh_cell.add_vertex_neighbours(possible_neighbour.index)
+#        print(green("Completed initialising cell-vertex-sharing topology data"))
         
         # ESTABLISHING THE BOUNDARIES
         print(yellow("Initialising boundary data"))
@@ -349,30 +352,31 @@ class Mesh:
                 # Setting the boundaryTag as true for the cell
                 self.surfaces[i].boundaryTag = True
                 boundarySurfaces.append(i)
+
                 # Updating boundaryTag of cell in contact with boundary
                 boundCell = self.surfaces[i].straddling_cells[0]
                 self.cells[boundCell].boundaryTag = True
 
-        # Looping the list of boundarySurfaces to create all the boundaries
-        boundaryIndexCount = 0
-        while ( len(boundarySurfaces) > 0 ):
-            
-            newBoundary = boundary(boundaryIndexCount)
-            
-            # Looping until the newBoundary boundary object has been completely made
-            while( newBoundary.isOpen() ):
-                # Looping to find the next boundary element
-                for i, val in enumerate(boundarySurfaces):
-                    # Checking to see if the boundary element can be added
-                    if ( newBoundary.checkAppend(val) ):
-                        # the next boundary element for newBoundary has been found 
-                        # Removing this boundary element from boundarySurfaces
-                        del boundarySurfaces[i]
-                        break
-
-            # Adding the new boundary to the mesh's list of boundaries
-            self.boundaries.append(newBoundary)
-            boundaryIndexCount += 1
+#        # Looping the list of boundarySurfaces to create all the boundaries
+#        boundaryIndexCount = 0
+#        while ( len(boundarySurfaces) > 0 ):
+#            
+#            newBoundary = boundary(boundaryIndexCount)
+#            
+#            # Looping until the newBoundary boundary object has been completely made
+#            while( newBoundary.isOpen() ):
+#                # Looping to find the next boundary element
+#                for i, val in enumerate(boundarySurfaces):
+#                    # Checking to see if the boundary element can be added
+#                    if ( newBoundary.checkAppend(val) ):
+#                        # the next boundary element for newBoundary has been found 
+#                        # Removing this boundary element from boundarySurfaces
+#                        del boundarySurfaces[i]
+#                        break
+#
+#            # Adding the new boundary to the mesh's list of boundaries
+#            self.boundaries.append(newBoundary)
+#            boundaryIndexCount += 1
         print(green("Completed initialising boundary data"))
 
 
