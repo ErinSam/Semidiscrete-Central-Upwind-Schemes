@@ -22,6 +22,9 @@ import minmodForVLLim as vll
 sys.path.append('./dependencies/minmodForVLLim_lib')
 import fluxRelated as frtd
 
+sys.path.append('./dependencies/interfaceSpeed_lib')
+import interfaceSpeed as speed
+
 
 
 class vertex:
@@ -547,6 +550,72 @@ class Mesh:
         field = self.cells[cellIndex].flowField + self.dx/2 * derivative
 
         return field 
+
+
+    def numFlux_x(self, cellIndex):
+        """
+            Function that calculated the intercell numerical flux along the right face 
+            of a quadrilateral 2D mesh element for the 2D compressible Euler Equations. 
+
+            Args:
+                self (Mesh) : 
+                cellIndex (int) : index of the cell
+
+            Returns:
+                numFlux (ndarray(4,)) : numerical flux for the right interface
+        """
+        # Right neighbouring cell's cell-index
+        nebCellIndex = self.cells[cellIndex].surface_neighbours[1]
+
+        # Obtaining the flow fields of the required cells
+        fieldEast = self.cellEast(cellIndex)
+        fieldWest = self.cellWest(nebCellIndex)
+
+        # Obtaining the maximum and the minimum interface speed of the interface
+        maxIntf = speed.x(fieldEast, fieldWest)
+        minIntf = speed.x(fieldEast, fieldWest, minim=True)
+
+
+        # Calculating numerical flux
+        numFlux = (maxIntf * frtd.fluxF(fieldEast) - minIntf * frtd.fluxF(fieldWest)) \
+                    / (maxIntf*minIntf) \
+                   + (maxIntf*minIntf)/(maxIntf - minIntf) * (fieldWest - fieldEast)
+
+        return numFlux
+
+
+    def numFlux_y(self, cellIndex):
+        """
+            Function that calculates the intercell numerical flux along the top face of a 
+            quadrilateral 2D mesh element for the 2D compressible Euler Equations.
+
+            Args:
+                self (Mesh) : 
+                cellIndex (int) : index of the cell
+
+            Returns:
+                numFlux (ndarray(4,)) : numerical flux for the top interface
+        """
+        
+        # Top cell's cell-index
+        nebCellIndex = self.cells[cellIndex].surface_neighbours[2] 
+
+        # Obtaining the flow fields of the required cells
+        fieldNorth = self.cellNorth(cellIndex)
+        fieldSouth = self.cellSouth(nebCellIndex)
+
+        # Obtaining the maximum and minimum interface speeds 
+        maxIntf = speed.x(fieldNorth, fieldSouth)
+        minIntf = speed.x(fieldNorth, fieldSouth, minim=True)
+
+
+        # Calculating numerical flux
+        numFlux = (maxIntf * frtd.fluxG(fieldNorth) - minIntf * frtd.fluxG(fieldSouth)) \
+                    / (maxIntf - minIntf) \
+                    + (maxIntf*minIntf)/(maxIntf - minIntf) * (fieldSouth - fieldNorth)
+
+        return numFlux
+
 
 
 if __name__ == "__main__":
