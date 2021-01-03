@@ -617,6 +617,102 @@ class Mesh:
         return numFlux
 
 
+    def updateCells(self, dt):
+        """
+            UNTESTED
+
+            Method that updates the cells according to the semi-discrete scheme (slightly incorrect
+            because I am unsure how to handle the derivative term on the left hand side (2.4, [1]))
+
+            Args:
+                self (Mesh) : 
+
+            Returns:
+                None
+        """
+        # Setting dt (WARNING::WARNING)
+        #dt = 0.0005
+
+        # Looping over all the cells and updating if not boundary tagged 
+        for i, cell in enumerate(mesh.cells):
+            if !(cell.boundaryTag):
+                # Obtaining the index of the left cell
+                leftCellIndex = cell.surface_neighbours[3]
+
+                # Obtaining the index of the bottom cell
+                bottomCellIndex = cell.surface_neighbours[0]
+
+                # Calculating fluxes
+                fluxLeft = self.numFlux_x(leftCellIndex)
+                fluxRight = self.numFlux_x(cell.index)
+                fluxUp = self.numFlux_y(cell.index)
+                fluxDown = self.numFlux_y(bottomCellIndex)
+        
+                # Updating the flow Field
+                mesh.cells[cell.index].flowField += - (fluxRight - fluxLeft)/self.dx \
+                                                    - (fluxUp - fluxDown)/self.dy
+
+
+    def applyBoundaryConditions(self):
+        """
+            UNTESTED
+
+            Method that applies the zero gradient boundary conditons on the cells
+
+            Args:
+                self (Mesh) : 
+
+            Returns:
+                None
+        """
+        # Looping over all the cells and updating the boundary tagged cells
+        for i, cell in enumerate(mesh.cells):
+            if (cell.boundaryTag):
+                for j, ind in enumerate(cell.surface_neighbours):
+                    if !(self.cells[ind].boundaryTag):
+                        self.cells[cell.index].flowField = self.cells[ind].flowField
+                        break
+
+
+    def initialise(self, I, II, III, IV):
+        """
+            UNTESTED 
+
+            Function that initialises the cells according to provided data
+
+            Args:
+                self (Mesh) : 
+                I (ndarray(4,)) : 1st Quadrant of Mesh
+                II (ndarray(4,)) : 2nd Quadrant of Mesh
+                III (ndarray(4,)) : 3rd Quadrant of Mesh
+                IV (ndarray(4,)) : 4th Quadrant of Mesh
+
+            Returns:
+                None
+        """
+        # Looping over all the cells and initialising them 
+        for i, cell in enumerate(mesh.cells):
+            if ( cell.center[0] <= 0.5 & cell.center[1] >= 0.5 ):
+                self.cells[cell.index].flowField = I
+            elif ( cell.center[0] > 0.5 & cell.center[1] >= 0.5 ):
+                self.cells[cell.index].flowField = II
+            elif ( cell.center[0] > 0.5 & cell.center[1] < 0.5 ):
+                self.cells[cell.index].flowField = III
+            else:
+                self.cells[cell.index].flowField = IV
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     mesh = Mesh("./Meshes/2D100x100.msh")
