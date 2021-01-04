@@ -47,11 +47,11 @@ cpdef eigvalMaxMinF(np.ndarray[double, ndim=1] U, bint minim=False):
                      [(-c_ratio*u4*u2/u1**2 + c_*(u2**3/u1**3 + u3**3/u1**3)), (c_ratio*u4/u1 - 1.5*c_*u2**2/u1**2), (-1.5*c_*u3**2/u1**2), c_ratio*u2/u1]])
 
     # Obtaining the max or the min of the eigenvalue
-    cdef np.ndarray[double, ndim=1] eigvals = np.linalg.eigvals(jacb)
+    cdef np.ndarray[double complex, ndim=1] eigvals = np.linalg.eig(jacb)[0]
     if ( minim ):
-        return eigvals.min()
+        return eigvals.min().real
     else:
-        return eigvals.max()
+        return eigvals.max().real
 
 
 @cython.boundscheck(False)
@@ -90,11 +90,11 @@ cpdef eigvalMaxMinG(np.ndarray[double, ndim=1] U, bint minim=False):
                                                                         c_ratio*u3/u1]])
 
     # Obtaining the max or the min of the eigenvalue
-    cdef np.ndarray[double, ndim=1] eigvals = np.linalg.eigvals(jacb)
+    cdef np.ndarray[double complex, ndim=1] eigvals = np.linalg.eig(jacb)[0]
     if ( minim ):
-        return eigvals.min()
+        return eigvals.min().real
     else:
-        return eigvals.max()
+        return eigvals.max().real
 
 
 @cython.boundscheck(False)
