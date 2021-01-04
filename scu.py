@@ -10,6 +10,7 @@ from simple_colors import *
 import sys
 import numpy as np
 import math as m
+import pandas as pd
 import gmshparser
 import meshio
 
@@ -24,6 +25,9 @@ import fluxRelated as frtd
 
 sys.path.append('./dependencies/interfaceSpeed_lib')
 import interfaceSpeed as speed
+
+sys.path.append('./dependencies/converter_lib')
+import converter as convert
 
 
 
@@ -706,6 +710,50 @@ class Mesh:
             else:
                 self.cells[cell.index].flowField = IV
 
+
+    def save(self):
+        """
+            UNTESTED
+
+            Method that saves the data corresponding to the current time in HDF5 format 
+            that can be later read in my an appropriate post-processor. The data frame save the 
+            cell-Index, the location of the cell center as the x-coord and the y-coord (separately), 
+            density, x-comp of velocity, y-comp of velocity and the pressure of all the cells in the 
+            mesh. 
+
+            The way in which data is saved also allows it to be reloaded to continue from a certain
+            time step. This is a critical feature. 
+            
+            HDF5 file is saved in a directory './results/' and writes over previous saves (no 
+            appending). File is saved with the time for which the data is being saved as the 
+            filename: $(self.time).h5
+            
+            Args: 
+                self (Mesh) : 
+
+            Returns:
+                None
+        """
+
+        # Creating a new dataframe for the given time step
+        df = pd.DataFrame(columns=['index', 'x', 'y', 'rho', 'u', 'v', 'p'])
+
+        for i, cell in enumerate(mesh.cells):
+            # Converting the flowField into its primitive variables 
+            W = convert.conservedToPrimitive(cell.flowField)
+                
+            # Writing in the data to the data frame 
+            df = df.append({'index': cell.index, 
+                            'x': cell.center[0],
+                            'y': cell.center[1],
+                            'rho': W[0], 
+                            'u': W[1], 
+                            'v': W[2], 
+                            'p': W[3]}, ignore_index=True)
+
+        # Writing the file 
+        fileName = str(self.time)
+        df.to_hdf("./results/" + fileName + ".h5", "table", append=False)
 
 
 
