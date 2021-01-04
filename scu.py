@@ -18,10 +18,10 @@ sys.path.append('./../Mesh-Handlers-and-Pre-Processing/Topology')
 import cartesian_geom as cgm
 
 sys.path.append('./dependencies/fluxRelated_lib')
-import minmodForVLLim as vll
+import fluxRelated as frtd
 
 sys.path.append('./dependencies/minmodForVLLim_lib')
-import fluxRelated as frtd
+import minmodForVLLim as vll
 
 sys.path.append('./dependencies/interfaceSpeed_lib')
 import interfaceSpeed as speed
@@ -643,7 +643,7 @@ class Mesh:
 
         # Looping over all the cells and updating if not boundary tagged 
         for i, cell in enumerate(mesh.cells):
-            if !(cell.boundaryTag):
+            if not cell.boundaryTag :
                 # Obtaining the index of the left cell
                 leftCellIndex = cell.surface_neighbours[3]
 
@@ -678,7 +678,7 @@ class Mesh:
         for i, cell in enumerate(mesh.cells):
             if (cell.boundaryTag):
                 for j, ind in enumerate(cell.surface_neighbours):
-                    if !(self.cells[ind].boundaryTag):
+                    if not self.cells[ind].boundaryTag:
                         self.cells[cell.index].flowField = self.cells[ind].flowField
                         break
 
@@ -701,14 +701,14 @@ class Mesh:
         """
         # Looping over all the cells and initialising them 
         for i, cell in enumerate(mesh.cells):
-            if ( cell.center[0] <= 0.5 & cell.center[1] >= 0.5 ):
+            if ( (cell.center[0] >= 0.5) & (cell.center[1] >= 0.5) ):
                 self.cells[cell.index].flowField = I
-            elif ( cell.center[0] > 0.5 & cell.center[1] >= 0.5 ):
+            elif ( (cell.center[0] < 0.5) & (cell.center[1] >= 0.5) ):
                 self.cells[cell.index].flowField = II
-            elif ( cell.center[0] > 0.5 & cell.center[1] < 0.5 ):
-                self.cells[cell.index].flowField = III
-            else:
+            elif ( (cell.center[0] >= 0.5) & (cell.center[1] < 0.5) ):
                 self.cells[cell.index].flowField = IV
+            else:
+                self.cells[cell.index].flowField = III
 
 
     def save(self):
@@ -768,9 +768,24 @@ class Mesh:
 
 
 if __name__ == "__main__":
-    mesh = Mesh("./Meshes/2D100x100.msh")
+    mesh = Mesh("./Meshes/2D11x11.msh", 0.1, 0.1)
 
-    print(yellow("\nFollowing are the boundary cells"))
-    for i, mesh_cell in enumerate(mesh.cells):
-        if ( mesh_cell.boundaryTag ):
-            print(green("Cell index: "), mesh_cell.index)  
+#    print(yellow("\nFollowing are the boundary cells"))
+#    for i, mesh_cell in enumerate(mesh.cells):
+#        if ( mesh_cell.boundaryTag ):
+#            print(green("Cell index: "), mesh_cell.index)  
+
+
+    I = np.array([1.0, 0.0, 0.0, 1.0])
+    II = np.array([0.5197, -0.7259, 0.0, 0.4])
+    III = np.array([0.1072, -0.7259, -1.4045, 0.0439])
+    IV = np.array([0.2579, 0.0, -1.4045, 0.15])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    mesh.initialise(I, II, III, IV)
+    mesh.save()
+
