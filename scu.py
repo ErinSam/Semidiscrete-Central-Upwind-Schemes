@@ -240,6 +240,7 @@ class Mesh:
 
     def __init__(self, mesh_file, dx, dy):
         # MAIN ATTRIBUTES
+        self.time = 0.0
         self.dx = dx
         self.dy = dy
         self.vertices = [] 
@@ -633,6 +634,9 @@ class Mesh:
         # Setting dt (WARNING::WARNING)
         #dt = 0.0005
 
+        # Updating the Mesh time 
+        self.time += dt
+
         # Looping over all the cells and updating if not boundary tagged 
         for i, cell in enumerate(mesh.cells):
             if !(cell.boundaryTag):
@@ -649,8 +653,9 @@ class Mesh:
                 fluxDown = self.numFlux_y(bottomCellIndex)
         
                 # Updating the flow Field
-                mesh.cells[cell.index].flowField += - (fluxRight - fluxLeft)/self.dx \
-                                                    - (fluxUp - fluxDown)/self.dy
+                mesh.cells[cell.index].flowField += - dt*(fluxRight - fluxLeft)/self.dx \
+                                                    - dt*(fluxUp - fluxDown)/self.dy
+        
 
 
     def applyBoundaryConditions(self):
