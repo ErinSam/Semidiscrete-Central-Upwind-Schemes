@@ -6,6 +6,7 @@
 # Erin Sam Joe | NITK '23 | Mechanical Engg. Major | Electronics & Electrical Engg. Minor
 
 from simple_colors import *
+from IPython import embed
 
 import sys
 import numpy as np
@@ -215,6 +216,7 @@ class cell:
         self.vertex_neighbours = []
         self.surface_neighbours = []
         self.boundaryTag = False
+        self.innerBoundaryTag = False
         self.flowField = np.zeros(4)
         self.flowFieldTemp = np.zeros(4)
     
@@ -340,17 +342,6 @@ class Mesh:
                         mesh_cell.add_surface_neighbours(possible_neighbour)
         print(green("Completed initialising cell-surface-sharing topology data"))
 
-
-#        # INITIALISING CELL-VERTEX-SHARING NIEGHBOURS
-#        print(yellow("Initialising cell-vertex-sharing topology data"))
-#        for mesh_cell in self.cells:
-#            for possible_neighbour in self.cells:
-#                for vert_index in mesh_cell.vert_indices:
-#                    if ( vert_index in possible_neighbour.vert_indices ):
-#                        if ( (possible_neighbour.index != mesh_cell.index) & 
-#                             (possible_neighbour.index not in mesh_cell.vertex_neighbours) ):
-#                            mesh_cell.add_vertex_neighbours(possible_neighbour.index)
-#        print(green("Completed initialising cell-vertex-sharing topology data"))
         
         # ESTABLISHING THE BOUNDARIES
         print(yellow("Initialising boundary data"))
@@ -365,27 +356,14 @@ class Mesh:
                 # Updating boundaryTag of cell in contact with boundary
                 boundCell = self.surfaces[i].straddling_cells[0]
                 self.cells[boundCell].boundaryTag = True
+        
+        # Tagging the inner boundary (our mesh is padded twice)
+        for i, innBoundCell in enumerate(self.cells):
+            if innBoundCell.boundaryTag:
+                for j, ind in enumerate(innBoundCell.surface_neighbours):
+                    if not self.cells[ind].boundaryTag:
+                        self.cells[ind].innerBoundaryTag = True
 
-#        # Looping the list of boundarySurfaces to create all the boundaries
-#        boundaryIndexCount = 0
-#        while ( len(boundarySurfaces) > 0 ):
-#            
-#            newBoundary = boundary(boundaryIndexCount)
-#            
-#            # Looping until the newBoundary boundary object has been completely made
-#            while( newBoundary.isOpen() ):
-#                # Looping to find the next boundary element
-#                for i, val in enumerate(boundarySurfaces):
-#                    # Checking to see if the boundary element can be added
-#                    if ( newBoundary.checkAppend(val) ):
-#                        # the next boundary element for newBoundary has been found 
-#                        # Removing this boundary element from boundarySurfaces
-#                        del boundarySurfaces[i]
-#                        break
-#
-#            # Adding the new boundary to the mesh's list of boundaries
-#            self.boundaries.append(newBoundary)
-#            boundaryIndexCount += 1
         print(green("Completed initialising boundary data"))
 
 
@@ -438,8 +416,8 @@ class Mesh:
         # fieldN : flowField of the N cell
         # fieldS : flowField of the S cell 
         field_ = self.cells[cellIndex].flowField
-        fieldN = self.cells[self.cells[surface_neighbours][2]].flowField
-        fieldS = self.cells[self.cells[surface_neighbours][0]].flowField
+        fieldN = self.cells[self.cells[cellIndex].surface_neighbours[2]].flowField
+        fieldS = self.cells[self.cells[cellIndex].surface_neighbours[0]].flowField
 
         # Calculating input for minmod
         var1 = theta * (fieldN - field_)/self.dx
@@ -472,8 +450,8 @@ class Mesh:
         # fieldW : flowField of the W cell
         # fieldE : flowField of the E cell 
         field_ = self.cells[cellIndex].flowField
-        fieldW = self.cells[self.cells[surface_neighbours][3]].flowField
-        fieldE = self.cells[self.cells[surface_neighbours][1]].flowField
+        fieldW = self.cells[self.cells[cellIndex].surface_neighbours[3]].flowField
+        fieldE = self.cells[self.cells[cellIndex].surface_neighbours[1]].flowField
 
         # Calculating input for minmod
         var1 = theta * (fieldW - field_)/self.dy
@@ -581,11 +559,13 @@ class Mesh:
         maxIntf = speed.x(fieldEast, fieldWest)
         minIntf = speed.x(fieldEast, fieldWest, minim=True)
 
-
         # Calculating numerical flux
-        numFlux = (maxIntf * frtd.fluxF(fieldEast) - minIntf * frtd.fluxF(fieldWest)) \
-                    / (maxIntf*minIntf) \
-                   + (maxIntf*minIntf)/(maxIntf - minIntf) * (fieldWest - fieldEast)
+        if ((maxIntf == 0) & (minIntf == 0)):
+            numFlux = 0
+        else:
+            numFlux = (maxIntf * frtd.fluxF(fieldEast) - minIntf * frtd.fluxF(fieldWest)) \
+                        / (maxIntf - minIntf) \
+                       + (maxIntf*minIntf)/(maxIntf - minIntf) * (fieldWest - fieldEast)
 
         return numFlux
 
@@ -611,14 +591,17 @@ class Mesh:
         fieldSouth = self.cellSouth(nebCellIndex)
 
         # Obtaining the maximum and minimum interface speeds 
-        maxIntf = speed.x(fieldNorth, fieldSouth)
-        minIntf = speed.x(fieldNorth, fieldSouth, minim=True)
+        maxIntf = speed.y(fieldNorth, fieldSouth)
+        minIntf = speed.y(fieldNorth, fieldSouth, minim=True)
 
 
         # Calculating numerical flux
-        numFlux = (maxIntf * frtd.fluxG(fieldNorth) - minIntf * frtd.fluxG(fieldSouth)) \
-                    / (maxIntf - minIntf) \
-                    + (maxIntf*minIntf)/(maxIntf - minIntf) * (fieldSouth - fieldNorth)
+        if ((maxIntf == 0) & (minIntf == 0)):
+            numFlux = 0
+        else:
+            numFlux = (maxIntf * frtd.fluxG(fieldNorth) - minIntf * frtd.fluxG(fieldSouth)) \
+                        / (maxIntf - minIntf) \
+                        + (maxIntf*minIntf)/(maxIntf - minIntf) * (fieldSouth - fieldNorth)
 
         return numFlux
 
@@ -647,13 +630,13 @@ class Mesh:
         self.time += dt
 
         # Looping over all the cells and updating if not boundary tagged 
-        for i, cell in enumerate(mesh.cells):
-            if not cell.boundaryTag :
+        for i, elem in enumerate(mesh.cells):
+            if not elem.boundaryTag and not elem.innerBoundaryTag:
                 # Obtaining the index of the left cell
-                leftCellIndex = cell.surface_neighbours[3]
+                leftCellIndex = elem.surface_neighbours[3]
 
                 # Obtaining the index of the bottom cell
-                bottomCellIndex = cell.surface_neighbours[0]
+                bottomCellIndex = elem.surface_neighbours[0]
 
                 # Calculating fluxes
                 fluxLeft = self.numFlux_x(leftCellIndex)
@@ -666,8 +649,9 @@ class Mesh:
                                                        - dt*(fluxRight - fluxLeft)/dx \
                                                        - dt*(fluxUp - fluxDown)/dy
                 
-        for i , cell in enumerate(mesh.cells):
-            mesh.cells[i].flowField = mesh.cells[i].flowFieldTemp
+        for i , elem in enumerate(mesh.cells):
+            if not elem.boundaryTag and not elem.innerBoundaryTag:
+                mesh.cells[i].flowField = mesh.cells[i].flowFieldTemp
         
 
 
@@ -676,6 +660,9 @@ class Mesh:
             UNTESTED
 
             Method that applies the zero gradient boundary conditons on the cells
+            CURRENT IMPLEMENTATION IS UNABLE TO HANDLE CORNER BOUNDARY TAGGED ELEMENTS
+            AND CORNER INNER BOUNDARY TAGGED ELEMENTS
+            Note that the current implementation of the mesh has 2 layer of boundary
 
             Args:
                 self (Mesh) : 
@@ -684,11 +671,17 @@ class Mesh:
                 None
         """
         # Looping over all the cells and updating the boundary tagged cells
-        for i, cell in enumerate(mesh.cells):
-            if (cell.boundaryTag):
-                for j, ind in enumerate(cell.surface_neighbours):
-                    if not self.cells[ind].boundaryTag:
+        for i, elem in enumerate(mesh.cells):
+            if (elem.innerBoundaryTag):
+                for j, ind in enumerate(elem.surface_neighbours):
+                    if not self.cells[ind].boundaryTag and not self.cells[ind].innerBoundaryTag:
+                        # Updating the inner boundary element 
                         self.cells[i].flowField = self.cells[ind].flowField
+                        break
+                for j, ind in enumerate(elem.surface_neighbours):
+                    if self.cells[ind].boundaryTag:
+                        # Updating the outer boundary element
+                        self.cells[ind].flowField = self.cells[i].flowField
                         break
 
 
@@ -709,15 +702,15 @@ class Mesh:
                 None
         """
         # Looping over all the cells and initialising them 
-        for i, cell in enumerate(mesh.cells):
-            if ( (cell.center[0] > (0.5+1e-6)) & (cell.center[1] > (0.5+1e-6)) ):
-                self.cells[cell.index].flowField = I
-            elif ( (cell.center[0] < (0.5-1e-6)) & (cell.center[1] > (0.5+1e-6)) ):
-                self.cells[cell.index].flowField = II
-            elif ( (cell.center[0] > (0.5+1e-6)) & (cell.center[1] < (0.5-1e-6)) ):
-                self.cells[cell.index].flowField = IV
-            elif( (cell.center[0] < (0.5-1e-6)) & (cell.center[1] < (0.5-1e-6)) ):
-                self.cells[cell.index].flowField = III
+        for i, elem in enumerate(mesh.cells):
+            if ( (elem.center[0] > (0.5+1e-6)) & (elem.center[1] > (0.5+1e-6)) ):
+                self.cells[elem.index].flowField = I
+            elif ( (elem.center[0] < (0.5-1e-6)) & (elem.center[1] > (0.5+1e-6)) ):
+                self.cells[elem.index].flowField = II
+            elif ( (elem.center[0] > (0.5+1e-6)) & (elem.center[1] < (0.5-1e-6)) ):
+                self.cells[elem.index].flowField = IV
+            elif( (elem.center[0] < (0.5-1e-6)) & (elem.center[1] < (0.5-1e-6)) ):
+                self.cells[elem.index].flowField = III
 
 
     def save(self):
@@ -761,18 +754,8 @@ class Mesh:
                             'p': W[3]}, ignore_index=True)
 
         # Writing the file 
-        fileName = str(self.time)
+        fileName = str(round(self.time,5))
         df.to_hdf("./results/" + fileName + ".h5", "table", append=False)
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -798,4 +781,11 @@ if __name__ == "__main__":
     mesh.initialise(I, II, III, IV)
     
     mesh.save()
+
+    for i in range(500):
+        print(yellow("\nMarching to time: "), i*0.0005)
+        mesh.updateCells(0.0005)
+        print(green("saved"))
+        mesh.save()
+     
 
