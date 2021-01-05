@@ -216,6 +216,7 @@ class cell:
         self.surface_neighbours = []
         self.boundaryTag = False
         self.flowField = np.zeros(4)
+        self.flowFieldTemp = np.zeros(4)
     
     def add_surfaces(self, surface_index):
         """ Method that adds a surface for the cell
@@ -638,6 +639,10 @@ class Mesh:
         # Setting dt (WARNING::WARNING)
         #dt = 0.0005
 
+        # Setting dx and dy
+        dx = self.dx
+        dy = self.dy
+
         # Updating the Mesh time 
         self.time += dt
 
@@ -652,13 +657,17 @@ class Mesh:
 
                 # Calculating fluxes
                 fluxLeft = self.numFlux_x(leftCellIndex)
-                fluxRight = self.numFlux_x(cell.index)
-                fluxUp = self.numFlux_y(cell.index)
+                fluxRight = self.numFlux_x(i)
+                fluxUp = self.numFlux_y(i)
                 fluxDown = self.numFlux_y(bottomCellIndex)
         
-                # Updating the flow Field
-                mesh.cells[cell.index].flowField += - dt*(fluxRight - fluxLeft)/self.dx \
-                                                    - dt*(fluxUp - fluxDown)/self.dy
+                # Saving temporary flow Field
+                mesh.cells[i].flowFieldTemp = mesh.cells[i].flowField \
+                                                       - dt*(fluxRight - fluxLeft)/dx \
+                                                       - dt*(fluxUp - fluxDown)/dy
+                
+        for i , cell in enumerate(mesh.cells):
+            mesh.cells[i].flowField = mesh.cells[i].flowFieldTemp
         
 
 
@@ -679,7 +688,7 @@ class Mesh:
             if (cell.boundaryTag):
                 for j, ind in enumerate(cell.surface_neighbours):
                     if not self.cells[ind].boundaryTag:
-                        self.cells[cell.index].flowField = self.cells[ind].flowField
+                        self.cells[i].flowField = self.cells[ind].flowField
                         break
 
 
@@ -701,13 +710,13 @@ class Mesh:
         """
         # Looping over all the cells and initialising them 
         for i, cell in enumerate(mesh.cells):
-            if ( (cell.center[0] >= 0.5) & (cell.center[1] >= 0.5) ):
+            if ( (cell.center[0] > (0.5+1e-6)) & (cell.center[1] > (0.5+1e-6)) ):
                 self.cells[cell.index].flowField = I
-            elif ( (cell.center[0] < 0.5) & (cell.center[1] >= 0.5) ):
+            elif ( (cell.center[0] < (0.5-1e-6)) & (cell.center[1] > (0.5+1e-6)) ):
                 self.cells[cell.index].flowField = II
-            elif ( (cell.center[0] >= 0.5) & (cell.center[1] < 0.5) ):
+            elif ( (cell.center[0] > (0.5+1e-6)) & (cell.center[1] < (0.5-1e-6)) ):
                 self.cells[cell.index].flowField = IV
-            else:
+            elif( (cell.center[0] < (0.5-1e-6)) & (cell.center[1] < (0.5-1e-6)) ):
                 self.cells[cell.index].flowField = III
 
 
@@ -787,5 +796,6 @@ if __name__ == "__main__":
     IV = convert.primitiveToConserved(IV)
 
     mesh.initialise(I, II, III, IV)
+    
     mesh.save()
 
