@@ -759,258 +759,259 @@ class Mesh:
 
 
 
+
+# Defining the different test configurations
+def config1():
+    I = np.array([1.0, 0.0, 0.0, 1.0])
+    II = np.array([0.5197, -0.7259, 0.0, 0.4])
+    III = np.array([0.1072, -0.7259, -1.4045, 0.0439])
+    IV = np.array([0.2579, 0.0, -1.4045, 0.15])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+def config2():
+    I = np.array([1.0, 0.0, 0.0, 1.0])
+    II = np.array([0.5197, -0.7259, 0.0, 0.4])
+    III = np.array([1.0, -0.7259, -0.7259, 1.0])
+    IV = np.array([0.5197, 0.0, -0.7259, 0.4])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+def config3():
+    I = np.array([1.5, 0.0, 0.0, 1.5])
+    II = np.array([0.5323, 1.206, 0.0, 0.3])
+    III = np.array([0.138, 1.206, 1.206, 0.029])
+    IV = np.array([0.5323, 0.0, 1.206, 0.3])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+def config4():
+    I = np.array([1.1, 0.0, 0.0, 1.1])
+    II = np.array([0.5065, 0.8939, 0.0, 0.35])
+    III = np.array([1.1, 0.8939, 0.8939, 1.1])
+    IV = np.array([0.5065, 0.0, 0.8939, 0.35])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+def config5():
+    I = np.array([1.0, -0.75, -0.75, 1.0])
+    II = np.array([2.0, -0.75, 0.5, 1.0])
+    III = np.array([1.0, 0.75, 0.5, 1.0])
+    IV = np.array([3.0, 0.75, -0.5, 1.0])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+def config6():
+    I = np.array([1.0, 0.75, -0.5, 1.0])
+    II = np.array([2.0, 0.75, 0.5, 1.0])
+    III = np.array([1.0, -0.75, 0.5, 1.0])
+    IV = np.array([3.0, -0.75, -0.5, 1.0])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+def config7():
+    I = np.array([1.0, 0.1, 0.1, 1.0])
+    II = np.array([0.5197, -0.6259, 0.1, 0.4])
+    III = np.array([0.8, 0.1, 0.1, 0.4])
+    IV = np.array([0.5197, 0.1, -0.6259, 0.4])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+def config8():
+    I = np.array([0.5197, 0.1, 0.1, 0.4])
+    II = np.array([1.0, -0.6259, 0.1, 1.0])
+    III = np.array([0.8, 0.1, 0.1, 1.0])
+    IV = np.array([1.0, 0.1, -0.6259, 1.0])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+def config9():
+    I = np.array([1.0, 0.0, 0.3, 1.0])
+    II = np.array([2.0, 0.0, -0.3, 1.0])
+    III = np.array([1.039, 0.0, -0.8133, 0.4])
+    IV = np.array([0.5197, 0.0, -0.4259, 0.4])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+def config10():
+    I = np.array([1.0, 0.0, 0.4297, 1.0])
+    II = np.array([0.5, 0.0, 0.6076, 1.0])
+    III = np.array([0.2281, 0.0, -0.6076, 0.3333])
+    IV = np.array([0.4562, 0.0, -0.4297, 0.3333])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+def config11():
+    I = np.array([1.0, 0.1, 0.0, 1.0])
+    II = np.array([0.5313, 0.8276, 0.0, 0.4])
+    III = np.array([0.8, 0.1, 0.0, 0.4])
+    IV = np.array([0.5313, 0.1, 0.7276, 0.4])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+def config12():
+    I = np.array([0.5313, 0.0, 0.0, 0.4])
+    II = np.array([1.0, 0.7276, 0.0, 1.0])
+    III = np.array([0.8, 0.0, 0.0, 1.0])
+    IV = np.array([1.0, 0.0, 0.7276, 1.0])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+def config13():
+    I = np.array([1.0, 0.0, -0.3, 1.0])
+    II = np.array([2.0, 0.0, 0.3, 1.0])
+    III = np.array([1.0625, 0.0, 0.8145, 0.4])
+    IV = np.array([0.5313, 0.0, 0.4276, 0.0])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+def config14():
+    I = np.array([2.0, 0.0, -0.5606, 8.0])
+    II = np.array([1.0, 0.0, -1.2172, 8.0])
+    III = np.array([0.4736, 0.0, 1.2172, 2.6667])
+    IV = np.array([0.9474, 0.0, 1.1606, 2.6667])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+def config15():
+    I = np.array([1.0, 0.1, -0.3, 1.0])
+    II = np.array([0.5197, -0.6259, -0.3, 0.4])
+    III = np.array([0.8, 0.1, -0.3, 0.4])
+    IV = np.array([0.5313, 0.1, 0.4276, 0.4])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+def config16():
+    I = np.array([0.5313, 0.1, 0.1, 0.4])
+    II = np.array([1.0222, -0.6179, 0.1, 1.0])
+    III = np.array([0.8, 0.1, 0.1, 1.0])
+    IV = np.array([1.0, 0.1, 0.8276, 1.0])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+def config17():
+    I = np.array([1.0, 0.0, -0.4, 1.0])
+    II = np.array([2.0, 0.0, -0.3, 1.0])
+    III = np.array([1.0625, 0.0, 0.2145, 0.4])
+    IV = np.array([0.5197, 0.0, -1.1259, 0.4])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+def config18():
+    I = np.array([1.0, 0.0, 1.0, 1.0])
+    II = np.array([2.0, 0.0, -0.3, 1.0])
+    III = np.array([1.0625, 0.0, 0.2145, 0.4])
+    IV = np.array([0.5197, 0.0, 0.2741, 0.4])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+def config19():
+    I = np.array([1.0, 0.0, 0.3, 1.0])
+    II = np.array([2.0, 0.0, -0.3, 1.0])
+    III = np.array([1.0625, 0.0, 0.2145, 0.4])
+    IV = np.array([0.5197, 0.0, -0.4259, 0.4])
+
+    I = convert.primitiveToConserved(I)
+    II = convert.primitiveToConserved(II)
+    III = convert.primitiveToConserved(III)
+    IV = convert.primitiveToConserved(IV)
+
+    return I, II, III, IV
+
+
+
 if __name__ == "__main__":
     mesh = Mesh("./Meshes/2D101x101.msh", 0.1, 0.1)
-
-    # Defining the different test configurations
-    def config1():
-        I = np.array([1.0, 0.0, 0.0, 1.0])
-        II = np.array([0.5197, -0.7259, 0.0, 0.4])
-        III = np.array([0.1072, -0.7259, -1.4045, 0.0439])
-        IV = np.array([0.2579, 0.0, -1.4045, 0.15])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-    def config2():
-        I = np.array([1.0, 0.0, 0.0, 1.0])
-        II = np.array([0.5197, -0.7259, 0.0, 0.4])
-        III = np.array([1.0, -0.7259, -0.7259, 1.0])
-        IV = np.array([0.5197, 0.0, -0.7259, 0.4])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-    def config3():
-        I = np.array([1.5, 0.0, 0.0, 1.5])
-        II = np.array([0.5323, 1.206, 0.0, 0.3])
-        III = np.array([0.138, 1.206, 1.206, 0.029])
-        IV = np.array([0.5323, 0.0, 1.206, 0.3])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-    def config4():
-        I = np.array([1.1, 0.0, 0.0, 1.1])
-        II = np.array([0.5065, 0.8939, 0.0, 0.35])
-        III = np.array([1.1, 0.8939, 0.8939, 1.1])
-        IV = np.array([0.5065, 0.0, 0.8939, 0.35])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-    def config5():
-        I = np.array([1.0, -0.75, -0.75, 1.0])
-        II = np.array([2.0, -0.75, 0.5, 1.0])
-        III = np.array([1.0, 0.75, 0.5, 1.0])
-        IV = np.array([3.0, 0.75, -0.5, 1.0])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-    def config6():
-        I = np.array([1.0, 0.75, -0.5, 1.0])
-        II = np.array([2.0, 0.75, 0.5, 1.0])
-        III = np.array([1.0, -0.75, 0.5, 1.0])
-        IV = np.array([3.0, -0.75, -0.5, 1.0])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-    def config7():
-        I = np.array([1.0, 0.1, 0.1, 1.0])
-        II = np.array([0.5197, -0.6259, 0.1, 0.4])
-        III = np.array([0.8, 0.1, 0.1, 0.4])
-        IV = np.array([0.5197, 0.1, -0.6259, 0.4])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-    def config8():
-        I = np.array([0.5197, 0.1, 0.1, 0.4])
-        II = np.array([1.0, -0.6259, 0.1, 1.0])
-        III = np.array([0.8, 0.1, 0.1, 1.0])
-        IV = np.array([1.0, 0.1, -0.6259, 1.0])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-    def config9():
-        I = np.array([1.0, 0.0, 0.3, 1.0])
-        II = np.array([2.0, 0.0, -0.3, 1.0])
-        III = np.array([1.039, 0.0, -0.8133, 0.4])
-        IV = np.array([0.5197, 0.0, -0.4259, 0.4])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-    def config10():
-        I = np.array([1.0, 0.0, 0.4297, 1.0])
-        II = np.array([0.5, 0.0, 0.6076, 1.0])
-        III = np.array([0.2281, 0.0, -0.6076, 0.3333])
-        IV = np.array([0.4562, 0.0, -0.4297, 0.3333])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-    def config11():
-        I = np.array([1.0, 0.1, 0.0, 1.0])
-        II = np.array([0.5313, 0.8276, 0.0, 0.4])
-        III = np.array([0.8, 0.1, 0.0, 0.4])
-        IV = np.array([0.5313, 0.1, 0.7276, 0.4])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-    def config12():
-        I = np.array([0.5313, 0.0, 0.0, 0.4])
-        II = np.array([1.0, 0.7276, 0.0, 1.0])
-        III = np.array([0.8, 0.0, 0.0, 1.0])
-        IV = np.array([1.0, 0.0, 0.7276, 1.0])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-    def config13():
-        I = np.array([1.0, 0.0, -0.3, 1.0])
-        II = np.array([2.0, 0.0, 0.3, 1.0])
-        III = np.array([1.0625, 0.0, 0.8145, 0.4])
-        IV = np.array([0.5313, 0.0, 0.4276, 0.0])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-    def config14():
-        I = np.array([2.0, 0.0, -0.5606, 8.0])
-        II = np.array([1.0, 0.0, -1.2172, 8.0])
-        III = np.array([0.4736, 0.0, 1.2172, 2.6667])
-        IV = np.array([0.9474, 0.0, 1.1606, 2.6667])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-    def config15():
-        I = np.array([1.0, 0.1, -0.3, 1.0])
-        II = np.array([0.5197, -0.6259, -0.3, 0.4])
-        III = np.array([0.8, 0.1, -0.3, 0.4])
-        IV = np.array([0.5313, 0.1, 0.4276, 0.4])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-    def config16():
-        I = np.array([0.5313, 0.1, 0.1, 0.4])
-        II = np.array([1.0222, -0.6179, 0.1, 1.0])
-        III = np.array([0.8, 0.1, 0.1, 1.0])
-        IV = np.array([1.0, 0.1, 0.8276, 1.0])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-    def config17():
-        I = np.array([1.0, 0.0, -0.4, 1.0])
-        II = np.array([2.0, 0.0, -0.3, 1.0])
-        III = np.array([1.0625, 0.0, 0.2145, 0.4])
-        IV = np.array([0.5197, 0.0, -1.1259, 0.4])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-    def config18():
-        I = np.array([1.0, 0.0, 1.0, 1.0])
-        II = np.array([2.0, 0.0, -0.3, 1.0])
-        III = np.array([1.0625, 0.0, 0.2145, 0.4])
-        IV = np.array([0.5197, 0.0, 0.2741, 0.4])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-    def config19():
-        I = np.array([1.0, 0.0, 0.3, 1.0])
-        II = np.array([2.0, 0.0, -0.3, 1.0])
-        III = np.array([1.0625, 0.0, 0.2145, 0.4])
-        IV = np.array([0.5197, 0.0, -0.4259, 0.4])
-
-        I = convert.primitiveToConserved(I)
-        II = convert.primitiveToConserved(II)
-        III = convert.primitiveToConserved(III)
-        IV = convert.primitiveToConserved(IV)
-
-        return I, II, III, IV
-
-
 
     I, II, III, IV = config2()
     mesh.initialise(I, II, III, IV)
