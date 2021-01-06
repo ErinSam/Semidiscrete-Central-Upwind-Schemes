@@ -1021,6 +1021,7 @@ if __name__ == "__main__":
     for i in range(1000000):
         print(yellow("\nMarching to time: "), (i+1)*0.000001)
         mesh.updateCells(0.000001)
+        mesh.applyBoundaryConditions()
         if ( i % 10 == 0):
             mesh.save()
             print(green("saved"))
