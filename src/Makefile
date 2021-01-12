@@ -10,6 +10,9 @@ INCLUDE = -I ../dependencies/Eigen/
 all : $(OBJS) 
 	$(CC) $(LFLAGS) $(OBJS) -o exec 
 
+meshClass.o : meshClass.cc meshClass.h fluxRelated.h fluxRelated.cc converter.h converter.cc minmodForVLLim.h minmodForVLLim.cc interfaceSpeed.h interfaceSpeed.cc
+	$(CC) $(CFLAGS) -fopenmp meshClass.cc
+
 testFluxRelated.o : testFluxRelated.cc fluxRelated.cc converter.cc fluxRelated.h converter.h
 	$(CC) $(CFLAGS) $(INCLUDE) testFluxRelated.cc
 

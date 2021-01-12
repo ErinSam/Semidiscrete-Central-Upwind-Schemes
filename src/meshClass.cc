@@ -59,10 +59,10 @@ class Mesh {
      *  numFlux_y(i,j)
      * 
      * Public Functions:
-     *  updateCells(dt)
-     *  applyBoundaryConditions()
-     *  save()
-     *  initialise()
+     *  updateCells(dt)                 TODO
+     *  applyBoundaryConditions()       TODO
+     *  save()                          TODO
+     *  initialise()                    TODO
      * 
      */
 
@@ -74,8 +74,14 @@ private:
     int cellCount;
 
     // Private Functions
-    void 
-
+    void vanLeerLimx(int i, int j, std::vector<double>& mmd);
+    void vanLeerLimy(int i, int j, std::vector<double>& mmd); 
+    void cellNorth(int i, int j, std::vector<double>& field);
+    void cellSouth(int i, int j, std::vector<double>& field);
+    void cellWest(int i, int j, std::vector<double>& field);
+    void cellEast(int i, int j, std::vector<double>& field);
+    void numFlux_x(int i, int j, std::vector<double>& flux);
+    void numFlux_y(int i, int j, std::vector<double>& flux);
 
 public:
 
@@ -91,6 +97,9 @@ public:
                 cells.push_back(cell(dx*(i+0.5), dy*(j+0.5)));
             }
         }        
+
+        // Adding boundary tags 
+        // TODO
     }
 
     void updateCells(double dt);
@@ -102,17 +111,446 @@ public:
 
 
 
+void Mesh::vanLeerLimx(int i, int j, std::vector<double>& mmd) {
+    /**
+     * Function that implements van Leer's one-parameter family of the minmod limiters 
+     * to limit (prevent) numerical oscillations for the x-direction
+     * 
+     * Args :
+     *  @param1 : index 
+     *  @param2 : index
+     *  @param3 : the "limited" partial derivative of flowField in the x-direction
+     */
+
+    // Arbitrarily setting the value of theta to 1.25
+    double theta = 1.25;
+
+    const std::vector<double>& field_ = cells[i*cellCount + j].flowField;
+    const std::vector<double>& fieldN = cells[i*cellCount + (j+1)].flowField;
+    const std::vector<double>& fieldS = cells[i*cellCount + (j-1)].flowField;
+
+    std::vector<double> var1, var2, var3;
+
+    var1.push_back(theta * (fieldN[0] - field_[0])/dx);
+    var1.push_back(theta * (fieldN[1] - field_[1])/dx);
+    var1.push_back(theta * (fieldN[2] - field_[2])/dx);
+
+    var2.push_back((fieldN[0] - fieldS[0])/(2*dx));
+    var2.push_back((fieldN[1] - fieldS[1])/(2*dx));
+    var2.push_back((fieldN[2] - fieldS[2])/(2*dx));
+
+    var3.push_back(theta * (field_[0] - fieldS[0])/dx);
+    var3.push_back(theta * (field_[1] - fieldS[1])/dx);
+    var3.push_back(theta * (field_[2] - fieldS[2])/dx);
+    
+    minmod(var1, var2, var3, mmd); 
+}
 
 
+void Mesh::vanLeerLimy(int i, int j, std::vector<double>& mmd) {
+    /**
+     * Function that implements van Leer's one-parameter family of the minmod limiters 
+     * to limit (prevent) numerical oscillations for the x-direction
+     * 
+     * Args :
+     *  @param1 : index 
+     *  @param2 : index
+     *  @param3 : the "limited" partial derivative of flowField in the x-direction
+     */
+
+    // Arbitrarily setting the value of theta to 1.25
+    double theta = 1.25;
+    
+    const std::vector<double>& field_ = cells[i*cellCount + j].flowField;
+    const std::vector<double>& fieldW = cells[(i-1)*cellCount + j].flowField;
+    const std::vector<double>& fieldE = cells[(i+1)*cellCount + j].flowField;
+
+    std::vector<double> var1, var2, var3;
+
+    var1.push_back(theta * (fieldW[0] - field_[0])/dy);
+    var1.push_back(theta * (fieldW[1] - field_[1])/dy);
+    var1.push_back(theta * (fieldW[2] - field_[2])/dy);
+
+    var2.push_back((fieldW[0] - fieldE[0])/(2*dy));
+    var2.push_back((fieldW[1] - fieldE[1])/(2*dy));
+    var2.push_back((fieldW[2] - fieldE[2])/(2*dy));
+
+    var3.push_back(theta * (field_[0] - fieldE[0])/dy);
+    var3.push_back(theta * (field_[1] - fieldE[1])/dy);
+    var3.push_back(theta * (field_[2] - fieldE[2])/dy);
+
+    minmod(var1, var2, var3, mmd);
+}
 
 
+void Mesh::cellNorth(int i, int j, std::vector<double>& field) {
+    /**
+     * Function that returns the flowField of the cell above the cell of the cellIndex
+     * 
+     * Args :
+     *  @param1 : index
+     *  @param2 : index
+     *  @param3 : flowField of the north cell
+     */
+    
+    std::vector<double> mmd{0.0, 0.0, 0.0, 0.0};
+
+    // Derivative 
+    vanLeerLimy(i, j, mmd);
+
+    // Calculating the final
+    field[0] = cells[cellCount*i + j].flowField[0] + 0.5*dy*mmd[0]; 
+    field[1] = cells[cellCount*i + j].flowField[1] + 0.5*dy*mmd[1]; 
+    field[2] = cells[cellCount*i + j].flowField[2] + 0.5*dy*mmd[2]; 
+    field[3] = cells[cellCount*i + j].flowField[3] + 0.5*dy*mmd[3]; 
+}
 
 
+void Mesh::cellSouth(int i, int j, std::vector<double>& field) { 
+    /**
+     * Function that returns the flowField of the cell above the cell of the cellIndex
+     * 
+     * Args :
+     *  @param1 : index
+     *  @param2 : index
+     *  @param3 : flowField of the north cell
+     */
+    
+    std::vector<double> mmd{0.0, 0.0, 0.0, 0.0};
+
+    // Derivative 
+    vanLeerLimy(i, j, mmd);
+    
+    // Calculating the final 
+    field[0] = cells[cellCount*i + j].flowField[0] - 0.5*dy*mmd[0]; 
+    field[1] = cells[cellCount*i + j].flowField[1] - 0.5*dy*mmd[1]; 
+    field[2] = cells[cellCount*i + j].flowField[2] - 0.5*dy*mmd[2]; 
+    field[3] = cells[cellCount*i + j].flowField[3] - 0.5*dy*mmd[3]; 
+}
 
 
+void Mesh::cellWest(int i, int j, std::vector<double>& field) { 
+    /**
+     * Function that returns the flowField of the cell to the left of the cell of the cellIndex
+     * 
+     * Args :
+     *  @param1 : index
+     *  @param2 : index
+     *  @param3 : flowField of the west cell
+     */
+    
+    std::vector<double> mmd{0.0, 0.0, 0.0, 0.0};
+
+    // Derivative
+    vanLeerLimx(i, j, mmd);
+    
+    // Calculating the final 
+    field[0] = cells[cellCount*i + j].flowField[0] - 0.5*dx*mmd[0]; 
+    field[1] = cells[cellCount*i + j].flowField[1] - 0.5*dx*mmd[1]; 
+    field[2] = cells[cellCount*i + j].flowField[2] - 0.5*dx*mmd[2]; 
+    field[3] = cells[cellCount*i + j].flowField[3] - 0.5*dx*mmd[3]; 
+}    
+
+    
+void Mesh::cellEast(int i, int j, std::vector<double>& field) { 
+    /**
+     * Function that returns the flowField of the cell to the right of the cell of the cellIndex
+     * 
+     * Args :
+     *  @param1 : index
+     *  @param2 : index
+     *  @param3 : flowField of the east cell
+     */
+    
+    std::vector<double> mmd{0.0, 0.0, 0.0, 0.0};
+
+    // Derivative
+    vanLeerLimx(i, j, mmd);
+    
+    // Calculating the final 
+    field[0] = cells[cellCount*i + j].flowField[0] + 0.5*dx*mmd[0]; 
+    field[1] = cells[cellCount*i + j].flowField[1] + 0.5*dx*mmd[1]; 
+    field[2] = cells[cellCount*i + j].flowField[2] + 0.5*dx*mmd[2]; 
+    field[3] = cells[cellCount*i + j].flowField[3] + 0.5*dx*mmd[3]; 
+}    
 
 
+void Mesh::numFlux_x(int i, int j, std::vector<double>& flux) {
+    /**
+     * Function that calculated the intercell numerical flux along the right face of a 
+     * quadrilateral 3D mesh element for the 2D compressible Euler equations
+     * 
+     * Args:
+     *  @param1 : index
+     *  @param2 : index
+     *  @param3 : intercell numerical flux 
+     */
 
+    std::vector<double> fieldEast{0.0, 0.0, 0.0, 0.0};
+    std::vector<double> fieldWest{0.0, 0.0, 0.0, 0.0};
+    std::vector<double> fluxFEast{0.0, 0.0, 0.0, 0.0};
+    std::vector<double> fluxFWest{0.0, 0.0, 0.0, 0.0};
+
+    // Obtaining the flow fields of the required cells
+    cellEast(i, j, fieldEast);
+    cellWest(i+1, j, fieldWest);
+
+    // Obtaining the maximum and the minimum interface speed of the interface 
+    double maxIntf = speedx(fieldEast, fieldWest);
+    double minIntf = speedx(fieldEast, fieldWest, true);
+
+    // Obtaining the fluxF for fieldEast and fieldWest
+    fluxF(fieldEast, fluxFEast);
+    fluxF(fieldWest, fluxFWest);
+
+    // Calculating numerical flux 
+    if ((maxIntf == 0) && (minIntf == 0)) {
+        flux[0] = 0.0;
+        flux[1] = 0.0;
+        flux[2] = 0.0;
+        flux[3] = 0.0;
+    }
+    else { 
+        flux[0] = (maxIntf * fluxFEast[0] - minIntf * fluxFWest[0]) / (maxIntf - minIntf)
+                    + (maxIntf*minIntf)/(maxIntf - minIntf) * (fieldWest[0] - fieldEast[0]);
+        flux[1] = (maxIntf * fluxFEast[1] - minIntf * fluxFWest[1]) / (maxIntf - minIntf)
+                    + (maxIntf*minIntf)/(maxIntf - minIntf) * (fieldWest[1] - fieldEast[1]);
+        flux[2] = (maxIntf * fluxFEast[2] - minIntf * fluxFWest[2]) / (maxIntf - minIntf)
+                    + (maxIntf*minIntf)/(maxIntf - minIntf) * (fieldWest[2] - fieldEast[2]);
+        flux[3] = (maxIntf * fluxFEast[3] - minIntf * fluxFWest[3]) / (maxIntf - minIntf)
+                    + (maxIntf*minIntf)/(maxIntf - minIntf) * (fieldWest[3] - fieldEast[3]);
+    }
+}
+
+
+void Mesh::numFlux_y(int i, int j, std::vector<double>& flux) { 
+    /**
+     * Function that calculated the intercell numerical flux along the right face of a 
+     * quadrilateral 3D mesh element for the 2D compressible Euler equations
+     * 
+     * Args:
+     *  @param1 : index
+     *  @param2 : index
+     *  @param3 : intercell numerical flux 
+     */
+    
+    std::vector<double> fieldNorth{0.0, 0.0, 0.0, 0.0};
+    std::vector<double> fieldSouth{0.0, 0.0, 0.0, 0.0};
+    std::vector<double> fluxGNorth{0.0, 0.0, 0.0, 0.0};
+    std::vector<double> fluxGSouth{0.0, 0.0, 0.0, 0.0};
+
+    // Obtaining the flow fields of the required cells
+    cellNorth(i, j, fieldNorth);
+    cellSouth(i, j+1, fieldSouth);
+
+    // Obtaining the maximum and minimum interace speed of the interface 
+    double maxIntf = speedy(fieldNorth, fieldSouth);
+    double minIntf = speedy(fieldNorth, fieldSouth, true);
+
+    // Obtaining the fluxG for fieldNorth and fieldSouth
+    fluxG(fieldNorth, fluxGNorth);
+    fluxG(fieldSouth, fluxGSouth);
+
+    // Calculating the numerical flux 
+    if ((maxIntf == 0) && (minIntf == 0)) {
+        flux[0] = 0.0;
+        flux[1] = 0.0;
+        flux[2] = 0.0;
+        flux[3] = 0.0;
+    }
+    else {
+        flux[0] = (maxIntf * fluxGNorth[0] - minIntf * fluxGSouth[0]) / (maxIntf - minIntf)
+                    + (maxIntf*minIntf)/(maxIntf - minIntf) * (fieldSouth[0] - fieldNorth[0]);
+        flux[1] = (maxIntf * fluxGNorth[1] - minIntf * fluxGSouth[1]) / (maxIntf - minIntf)
+                    + (maxIntf*minIntf)/(maxIntf - minIntf) * (fieldSouth[1] - fieldNorth[1]);
+        flux[2] = (maxIntf * fluxGNorth[2] - minIntf * fluxGSouth[2]) / (maxIntf - minIntf)
+                    + (maxIntf*minIntf)/(maxIntf - minIntf) * (fieldSouth[2] - fieldNorth[2]);
+        flux[3] = (maxIntf * fluxGNorth[3] - minIntf * fluxGSouth[3]) / (maxIntf - minIntf)
+                    + (maxIntf*minIntf)/(maxIntf - minIntf) * (fieldSouth[3] - fieldNorth[3]);
+    }
+}
+
+
+void Mesh::updateCells(double dt) {
+    /**
+     * Function that updates the cells according to the semi-discrete scheme and to the best 
+     * of my interpretation of it
+     * 
+     * Args : 
+     *  @param1 : the size of the time step
+     */
+    
+    // Updating the mesh time 
+    time += dt;
+
+    // Looping over all the cells and updating if it is not boundary tagged 
+    std::vector<double> fluxLeft{0.0, 0.0, 0.0, 0.0};
+    std::vector<double> fluxRight{0.0, 0.0, 0.0, 0.0};
+    std::vector<double> fluxUp{0.0, 0.0, 0.0, 0.0};
+    std::vector<double> fluxDown{0.0, 0.0, 0.0, 0.0};
+
+    for ( int i = 0; i<cellCount; i++ ) {
+        for ( int j = 0; j<cellCount; j++ ) {
+            if ( !cells[cellCount*i + j].boundaryTag && !cells[cellCount*i + j].innerBoundaryTag ) {
+                // Calculating the fluxes
+                numFlux_x(i-1, j, fluxLeft);
+                numFlux_x(i, j, fluxRight);
+                numFlux_y(i, j, fluxUp);
+                numFlux_y(i, j-1, fluxDown);
+            
+                // Saving temporary flow 
+                cells[cellCount*i + j].flowFieldTemp[0] = cells[cellCount*i + j].flowField[0]
+                                                          - dt*(fluxRight[0] - fluxLeft[0])/dx
+                                                          - dt*(fluxUp[0] - fluxDown[0])/dy;
+                cells[cellCount*i + j].flowFieldTemp[1] = cells[cellCount*i + j].flowField[1]
+                                                          - dt*(fluxRight[1] - fluxLeft[1])/dx
+                                                          - dt*(fluxUp[1] - fluxDown[1])/dy;
+                cells[cellCount*i + j].flowFieldTemp[2] = cells[cellCount*i + j].flowField[2]
+                                                          - dt*(fluxRight[2] - fluxLeft[2])/dx
+                                                          - dt*(fluxUp[2] - fluxDown[2])/dy;
+                cells[cellCount*i + j].flowFieldTemp[0] = cells[cellCount*i + j].flowField[3]
+                                                          - dt*(fluxRight[3] - fluxLeft[3])/dx
+                                                          - dt*(fluxUp[3] - fluxDown[3])/dy;
+            }
+        }
+    }
+
+  # pragma omp parallel for 
+    for ( int i = 0; i<cellCount*cellCount; i++ ) { 
+        if ( !cells[cellCount*i + j].boundaryTag && !cells[cellCount*i + j].innerBoundaryTag ) {
+            cells.flowField[0] = cells.flowFieldTemp[0];
+            cells.flowField[1] = cells.flowFieldTemp[1];
+            cells.flowField[2] = cells.flowFieldTemp[2];
+            cells.flowField[3] = cells.flowFieldTemp[3];
+        }
+    }
+}
+    
+
+void applyBoundaryConditions() {
+    /**
+     * Function that applies the zro gradient boundar conditions on the cells 
+     * CURRENT IMPLMENTATION IS UNABLE TO HANDLE CORNER BOUNDARY TAGGED ELEMENTS 
+     * AND CORNER INNER BOUNDARY TAGGED ELEMENTS
+     * Note that the current implementation of the mesh has 2 layers of boundary
+     * 
+     */
+
+    // Boundary conditions on the inner boundary elements
+  # pragma omp parallel for 
+    for ( int k = 2; k < (cellCount-2); k++ ) {
+        // Left Boundary 
+        cells[cellCount + k].flowField[0] = cells[cellCount*2 + k].flowField[0];    
+        cells[cellCount + k].flowField[1] = cells[cellCount*2 + k].flowField[1];    
+        cells[cellCount + k].flowField[2] = cells[cellCount*2 + k].flowField[2];    
+        cells[cellCount + k].flowField[3] = cells[cellCount*2 + k].flowField[3];    
+
+        // Right Boundary
+        cells[cellCount*(cellCount-2)+k].flowField[0]=cells[cellCount*(cellCount-3)+k].flowField[0];
+        cells[cellCount*(cellCount-2)+k].flowField[1]=cells[cellCount*(cellCount-3)+k].flowField[1];
+        cells[cellCount*(cellCount-2)+k].flowField[2]=cells[cellCount*(cellCount-3)+k].flowField[2];
+        cells[cellCount*(cellCount-2)+k].flowField[3]=cells[cellCount*(cellCount-3)+k].flowField[3];
+
+        // Bottom Boundary
+        cells[cellCount*k + 1].flowField[0] = cells[cellCount*k + 2].flowField[0]; 
+        cells[cellCount*k + 1].flowField[1] = cells[cellCount*k + 2].flowField[1]; 
+        cells[cellCount*k + 1].flowField[2] = cells[cellCount*k + 2].flowField[2]; 
+        cells[cellCount*k + 1].flowField[3] = cells[cellCount*k + 2].flowField[3]; 
+
+        // Top Boundary
+        cells[cellCount*k + cellCount-2].flowField[0]=cells[cellCount*k + cellCount-3].flowField[0];
+        cells[cellCount*k + cellCount-2].flowField[1]=cells[cellCount*k + cellCount-3].flowField[1];
+        cells[cellCount*k + cellCount-2].flowField[2]=cells[cellCount*k + cellCount-3].flowField[2];
+        cells[cellCount*k + cellCount-2].flowField[3]=cells[cellCount*k + cellCount-3].flowField[3];
+    }
+    
+    // Boudary conditions on the outer boundary elements
+  # pragma omp parallel for 
+    for ( int k = 1; k < (cellCount-1); k++ ) {
+        // Left Boundary 
+        cells[k].flowField[0] = cells[cellCount + k].flowField[0];    
+        cells[k].flowField[1] = cells[cellCount + k].flowField[1];    
+        cells[k].flowField[2] = cells[cellCount + k].flowField[2];    
+        cells[k].flowField[3] = cells[cellCount + k].flowField[3];    
+
+        // Right Boundary
+        cells[cellCount*(cellCount-1)+k].flowField[0]=cells[cellCount*(cellCount-2)+k].flowField[0];
+        cells[cellCount*(cellCount-1)+k].flowField[1]=cells[cellCount*(cellCount-2)+k].flowField[1];
+        cells[cellCount*(cellCount-1)+k].flowField[2]=cells[cellCount*(cellCount-2)+k].flowField[2];
+        cells[cellCount*(cellCount-1)+k].flowField[3]=cells[cellCount*(cellCount-2)+k].flowField[3];
+
+        // Bottom Boundary
+        cells[cellCount*k].flowField[0] = cells[cellCount*k + 1].flowField[0]; 
+        cells[cellCount*k].flowField[1] = cells[cellCount*k + 1].flowField[1]; 
+        cells[cellCount*k].flowField[2] = cells[cellCount*k + 1].flowField[2]; 
+        cells[cellCount*k].flowField[3] = cells[cellCount*k + 1].flowField[3]; 
+
+        // Top Boundary
+        cells[cellCount*k + cellCount-1].flowField[0]=cells[cellCount*k + cellCount-2].flowField[0];
+        cells[cellCount*k + cellCount-1].flowField[1]=cells[cellCount*k + cellCount-2].flowField[1];
+        cells[cellCount*k + cellCount-1].flowField[2]=cells[cellCount*k + cellCount-2].flowField[2];
+        cells[cellCount*k + cellCount-1].flowField[3]=cells[cellCount*k + cellCount-2].flowField[3];
+    }
+}        
+
+
+void initialise(std::vector<double>& I, std::vector<double>& II, std::vector<double>& III, 
+                std::vector<double>& IV) { 
+    /**
+     * Function that initialises the cells according to provided data 
+     * 
+     * Args : 
+     *  @param1 : 1st quadrant of the mesh
+     *  @param2 : 2nd quadrant of the mesh
+     *  @param3 : 3rd quadrant of the mesh
+     *  @param4 : 4th quadrant of the mesh
+     */
+
+    // Looping over all the cells to initialise them 
+    // Ist Quadrant 
+  # pragma omp parallel for collapse(2)        
+    for ( int i = cellCount/2; i < cellCount; i++ ) { 
+        for ( int j = cellCount/2; j < cellCount; j++ ) {
+            cells[cellCount*i + j].flowField[0] = I[0];
+            cells[cellCount*i + j].flowField[1] = I[1];
+            cells[cellCount*i + j].flowField[2] = I[2];
+            cells[cellCount*i + j].flowField[3] = I[3];
+        }
+    } 
+
+    // IInd Quadrant 
+  # pragma omp parallel for collapse(2)        
+    for ( int i = 0; i < cellCount/2; i++ ) { 
+        for ( int j = cellCount/2; j < cellCount; j++ ) {
+            cells[cellCount*i + j].flowField[0] = II[0];
+            cells[cellCount*i + j].flowField[1] = II[1];
+            cells[cellCount*i + j].flowField[2] = II[2];
+            cells[cellCount*i + j].flowField[3] = II[3];
+        }
+    } 
+
+    // IIIrd Quadrant 
+  # pragma omp parallel for collapse(2)        
+    for ( int i = 0; i < cellCount/2; i++ ) { 
+        for ( int j = 0; j < cellCount/2; j++ ) {
+            cells[cellCount*i + j].flowField[0] = III[0];
+            cells[cellCount*i + j].flowField[1] = III[1];
+            cells[cellCount*i + j].flowField[2] = III[2];
+            cells[cellCount*i + j].flowField[3] = III[3];
+        }
+    } 
+
+    // IVth Quadrant 
+  # pragma omp parallel for collapse(2)        
+    for ( int i = cellCount/2; i < cellCount; i++ ) { 
+        for ( int j = 0; j < cellCount/2; j++ ) {
+            cells[cellCount*i + j].flowField[0] = IV[0];
+            cells[cellCount*i + j].flowField[1] = IV[1];
+            cells[cellCount*i + j].flowField[2] = IV[2];
+            cells[cellCount*i + j].flowField[3] = IV[3];
+        }
+    } 
+}
 
 
 
@@ -157,28 +595,3 @@ int main() {
 
 return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

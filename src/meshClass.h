@@ -9,6 +9,7 @@
 
 #include <vector> 
 #include <iostream> 
+#include <omp.h>
 
 #include "converter.h"
 #include "fluxRelated.h"
