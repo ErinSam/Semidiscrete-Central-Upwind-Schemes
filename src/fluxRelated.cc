@@ -6,7 +6,7 @@
 #include "fluxRelated.h"
 
 
-double eigvalMaxMinF(const std::vector<double>& U, bool minim /*=true*/) {
+double eigvalMaxMinF(const std::vector<double>& U, bool minim) {
     /**
      * Function that finds the maximum or the minimum eigenvalue (based on choice) of 
      * the Jacobian matrix of the x-direction flux term for Compressible 2D Euler 
@@ -67,7 +67,7 @@ double eigvalMaxMinF(const std::vector<double>& U, bool minim /*=true*/) {
 }
 
 
-double eigvalMaxMinG(const std::vector<double> U, bool minim /*=false*/) {
+double eigvalMaxMinG(const std::vector<double>& U, bool minim) {
     /**
      * Function that finds the maximum or the minimum eigenvalue (based on choice) of 
      * the Jacobian matrix of the y-direction flux term for Compressible 2D Euler 

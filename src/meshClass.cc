@@ -59,10 +59,10 @@ class Mesh {
      *  numFlux_y(i,j)
      * 
      * Public Functions:
-     *  updateCells(dt)                 TODO
-     *  applyBoundaryConditions()       TODO
-     *  save()                          TODO
-     *  initialise()                    TODO
+     *  updateCells(dt)                 
+     *  applyBoundaryConditions()      
+     *  save()
+     *  initialise()                    
      * 
      */
 
@@ -83,6 +83,11 @@ private:
     void numFlux_x(int i, int j, std::vector<double>& flux);
     void numFlux_y(int i, int j, std::vector<double>& flux);
 
+    void _updateCells(double dt);
+    void _applyBoundaryConditions();
+    void _save();
+    void _initialise(int config);
+
 public:
 
     Mesh(int CELLCOUNT, double DX, double DY) {
@@ -98,15 +103,26 @@ public:
             }
         }        
 
-        // Adding boundary tags 
-        // TODO
+        // Setting boundary tags 
+        for ( int k = 0; k<cellCount; k++ ) {
+            cells[cellCount*k].boundaryTag = true;
+            cells[cellCount*k + cellCount-1].boundaryTag = true;
+            cells[k].boundaryTag = true;
+            cells[cellCount*(cellCount-1) + k].boundaryTag = true;
+
+            if ( (k>0) && (k<cellCount-1) ) {
+                cells[cellCount*k + 1].innerBoundaryTag = true;
+                cells[cellCount*k + cellCount-2].innerBoundaryTag = true;
+                cells[cellCount + k].innerBoundaryTag = true;
+                cells[cellCount*(cellCount-2) + k].innerBoundaryTag = true;
+            }
+        }
     }
 
     void updateCells(double dt);
     void applyBoundaryConditions();
     void save();
-    void initialise(std::vector<double> I, std::vector<double> II, std::vector<double> III,
-                    std::vector<double> IV);
+    void initialise(int config);
 };
 
 
@@ -296,7 +312,7 @@ void Mesh::numFlux_x(int i, int j, std::vector<double>& flux) {
     cellWest(i+1, j, fieldWest);
 
     // Obtaining the maximum and the minimum interface speed of the interface 
-    double maxIntf = speedx(fieldEast, fieldWest);
+    double maxIntf = speedx(fieldEast, fieldWest, false);
     double minIntf = speedx(fieldEast, fieldWest, true);
 
     // Obtaining the fluxF for fieldEast and fieldWest
@@ -344,7 +360,7 @@ void Mesh::numFlux_y(int i, int j, std::vector<double>& flux) {
     cellSouth(i, j+1, fieldSouth);
 
     // Obtaining the maximum and minimum interace speed of the interface 
-    double maxIntf = speedy(fieldNorth, fieldSouth);
+    double maxIntf = speedy(fieldNorth, fieldSouth, false);
     double minIntf = speedy(fieldNorth, fieldSouth, true);
 
     // Obtaining the fluxG for fieldNorth and fieldSouth
@@ -371,7 +387,7 @@ void Mesh::numFlux_y(int i, int j, std::vector<double>& flux) {
 }
 
 
-void Mesh::updateCells(double dt) {
+void Mesh::_updateCells(double dt) {
     /**
      * Function that updates the cells according to the semi-discrete scheme and to the best 
      * of my interpretation of it
@@ -417,17 +433,17 @@ void Mesh::updateCells(double dt) {
 
   # pragma omp parallel for 
     for ( int i = 0; i<cellCount*cellCount; i++ ) { 
-        if ( !cells[cellCount*i + j].boundaryTag && !cells[cellCount*i + j].innerBoundaryTag ) {
-            cells.flowField[0] = cells.flowFieldTemp[0];
-            cells.flowField[1] = cells.flowFieldTemp[1];
-            cells.flowField[2] = cells.flowFieldTemp[2];
-            cells.flowField[3] = cells.flowFieldTemp[3];
+        if ( !cells[i].boundaryTag && !cells[i].innerBoundaryTag ) {
+            cells[i].flowField[0] = cells[i].flowFieldTemp[0];
+            cells[i].flowField[1] = cells[i].flowFieldTemp[1];
+            cells[i].flowField[2] = cells[i].flowFieldTemp[2];
+            cells[i].flowField[3] = cells[i].flowFieldTemp[3];
         }
     }
 }
     
 
-void applyBoundaryConditions() {
+void Mesh::_applyBoundaryConditions() {
     /**
      * Function that applies the zro gradient boundar conditions on the cells 
      * CURRENT IMPLMENTATION IS UNABLE TO HANDLE CORNER BOUNDARY TAGGED ELEMENTS 
@@ -494,8 +510,7 @@ void applyBoundaryConditions() {
 }        
 
 
-void initialise(std::vector<double>& I, std::vector<double>& II, std::vector<double>& III, 
-                std::vector<double>& IV) { 
+void Mesh::_initialise(int config) { 
     /**
      * Function that initialises the cells according to provided data 
      * 
@@ -505,6 +520,15 @@ void initialise(std::vector<double>& I, std::vector<double>& II, std::vector<dou
      *  @param3 : 3rd quadrant of the mesh
      *  @param4 : 4th quadrant of the mesh
      */
+
+
+    std::vector<double> I{0.0, 0.0, 0.0, 0.0};
+    std::vector<double> II{0.0, 0.0, 0.0, 0.0};
+    std::vector<double> III{0.0, 0.0, 0.0, 0.0};
+    std::vector<double> IV{0.0, 0.0, 0.0, 0.0};
+
+    initialConfig(config, I, II, III, IV);
+
 
     // Looping over all the cells to initialise them 
     // Ist Quadrant 
@@ -553,45 +577,69 @@ void initialise(std::vector<double>& I, std::vector<double>& II, std::vector<dou
 }
 
 
+void Mesh::_save() {
+    /** 
+     * Function that save all the required mesh details
+     * Primitive flow field variables are sotred in .csv files where the file name is the 
+     * present simulation time and 
+     */
 
+    // Creating the file and opening it 
+    std::ofstream saveFile;
+    std::string filename = std::to_string(time) + ".csv";
+    saveFile.open(filename);
 
+    // Writing the file headers
+    saveFile << "index,x,y,rho,u,v,p" << std::endl;
 
+    // Creating the temp variable for primitve variable vectors
+    std::vector<double> prim{0.0, 0.0, 0.0, 0.0};
 
+    // Writing all the data into the file
+    for ( int i = 0; i<cellCount*cellCount; i++ ) { 
+        conservedToPrimitive(cells[i].flowField, prim);
+        saveFile << i+1 << "," << cells[i].center[0] << ","
+                               << cells[i].center[1] << ","
+                               << prim[0] << ","
+                               << prim[1] << ","
+                               << prim[2] << ","
+                               << prim[3] << std::endl;
+    }
+        
+    // Closing the outpute file
+    saveFile.close();
+} 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-int main() {
-
-    Mesh mesh(10, 0.1, 0.1);
-
-
-
-return 0;
+void Mesh::updateCells(double dt) {
+    _updateCells(dt);
 }
+
+void Mesh::applyBoundaryConditions() {
+    _applyBoundaryConditions();
+}
+
+void Mesh::save() {
+    _save();
+}
+
+void Mesh::initialise(int config) {
+    _initialise(config);
+}
+    
+
+
+// pybind11 to make python module
+PYBIND11_MODULE(meshClass, m) {
+    namespace py = pybind11;
+
+    m.doc() = "Contains class definition for a unfiorm, quadrilateral mesh that uses \
+                Semi-Discrete Central Upwind Scheme to solve the 2D compressible Euler Equations";
+
+    py::class_<Mesh>(m, "Mesh")
+        .def(py::init<int, double, double>())
+        .def("update", &Mesh::updateCells)
+        .def("applyBC", &Mesh::applyBoundaryConditions)
+        .def("save", &Mesh::save)
+        .def("initialise", &Mesh::initialise);
+}
+

@@ -10,7 +10,7 @@
 #include <Eigenvalues>
 
 // Prototypes
-double eigvalMaxMinF(const std::vector<double>&, bool=false);
-double eigvalMaxMinG(const std::vector<double> U, bool=false);
+double eigvalMaxMinF(const std::vector<double>& U, bool);
+double eigvalMaxMinG(const std::vector<double>& U, bool);
 void fluxF(const std::vector<double>& U, std::vector<double>& flux);
 void fluxG(const std::vector<double>& U, std::vector<double>& flux);

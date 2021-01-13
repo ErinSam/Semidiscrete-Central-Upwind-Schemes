@@ -7,7 +7,7 @@
 
 
 double speedx(const std::vector<double>& fieldEast, const std::vector<double>& fieldWest, 
-                bool minim /*=false*/) { 
+                bool minim) { 
     /**
      * Function that calculates the interface speed of the right interface of the cell.
      * 
@@ -38,8 +38,8 @@ double speedx(const std::vector<double>& fieldEast, const std::vector<double>& f
     }
     else {
         // Case that we want the maximum interface speed
-        eigval1 = eigvalMaxMinF(fieldWest);
-        eigval2 = eigvalMaxMinF(fieldEast);
+        eigval1 = eigvalMaxMinF(fieldWest, false);
+        eigval2 = eigvalMaxMinF(fieldEast, false);
 
         if ( (eigval1 > eigval2) && (eigval1 > 0.0) ) 
             intfSpeed = eigval1;
@@ -54,7 +54,7 @@ double speedx(const std::vector<double>& fieldEast, const std::vector<double>& f
 
 
 double speedy(const std::vector<double>& fieldNorth, const std::vector<double>& fieldSouth, 
-                bool minim /*= false*/) {
+                bool minim) {
     /**
      * Function that calculates the interface speed of the right interface of the cell.
      * 
@@ -85,8 +85,8 @@ double speedy(const std::vector<double>& fieldNorth, const std::vector<double>& 
     }
     else {
         // Case that we want the maximum interface speed
-        eigval1 = eigvalMaxMinG(fieldSouth);
-        eigval2 = eigvalMaxMinG(fieldNorth);
+        eigval1 = eigvalMaxMinG(fieldSouth, false);
+        eigval2 = eigvalMaxMinG(fieldNorth, false);
 
         if ( (eigval1 > eigval2) && (eigval1 > 0.0) ) 
             intfSpeed = eigval1;
