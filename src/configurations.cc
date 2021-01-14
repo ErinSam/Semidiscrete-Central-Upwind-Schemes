@@ -27,7 +27,7 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return;
     }
     else if ( config == 2 ) {
         std::vector<double> _I{1.0, 0.0, 0.0, 1.0};
@@ -40,7 +40,7 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return;
     }
     else if ( config == 3 ) {
         std::vector<double> _I{1.5, 0.0, 0.0, 1.5};
@@ -53,7 +53,7 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return;
     }
     else if ( config == 4 ) {
         std::vector<double> _I{1.1, 0.0, 0.0, 1.1};
@@ -66,7 +66,7 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return;
     }
     else if ( config == 5 ) {
         std::vector<double> _I{1.0, -0.75, -0.75, 1.0};
@@ -79,7 +79,7 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return; 
     }
     else if ( config == 6 ) {
         std::vector<double> _I{1.0, 0.75, -0.5, 1.0};
@@ -92,7 +92,7 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return;
     }
     else if ( config == 7 ) {
         std::vector<double> _I{1.0, 0.1, 0.1, 1.0};
@@ -105,7 +105,7 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return;
     }
     else if ( config == 8 ) {
         std::vector<double> _I{0.5197, 0.1, 0.1, 0.4};
@@ -118,7 +118,7 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return;
     }
     else if ( config == 9 ) {
         std::vector<double> _I{1.0, 0.0, 0.3, 1.0};
@@ -131,7 +131,7 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return;
     }
     else if ( config == 10 ) {
         std::vector<double> _I{1.0, 0.0, 0.4297, 1.0};
@@ -144,7 +144,7 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return;
     }
     else if ( config == 11 ) {
         std::vector<double> _I{1.0, 0.1, 0.0, 1.0};
@@ -157,7 +157,7 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return;
     }
     else if ( config == 12 ) {
         std::vector<double> _I{0.5313, 0.0, 0.0, 0.4};
@@ -170,7 +170,7 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return;
     }
     else if ( config == 13 ) {
         std::vector<double> _I{1.0, 0.0, -0.3, 1.0};
@@ -183,7 +183,7 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return;
     }
     else if ( config == 14 ) {
         std::vector<double> _I{2.0, 0.0, -0.5606, 8.0};
@@ -196,7 +196,7 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return;
     }
     else if ( config == 15 ) {
         std::vector<double> _I{1.0, 0.1, -0.3, 1.0};
@@ -209,7 +209,7 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return; 
     }
     else if ( config == 16 ) {
         std::vector<double> _I{0.5313, 0.1, 0.1, 0.4};
@@ -222,7 +222,7 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return;
     }
     else if ( config == 17 ) {
         std::vector<double> _I{1.0, 0.0, -0.4, 1.0};
@@ -235,7 +235,7 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return;
     }
     else if ( config == 18 ) {
         std::vector<double> _I{1.0, 0.0, 1.0, 1.0};
@@ -248,7 +248,7 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return;
     }
     else {
         std::vector<double> _I{1.0, 0.0, 0.3, 1.0};
@@ -261,6 +261,6 @@ void initialConfig(int config, std::vector<double>& I, std::vector<double>& II,
         primitiveToConserved(_III, III);
         primitiveToConserved(_IV, IV);
 
-        return 
+        return;
     }
 }

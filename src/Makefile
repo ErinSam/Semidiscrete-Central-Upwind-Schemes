@@ -1,6 +1,6 @@
 # Makefile
 
-OBJS = fluxRelated.o converter.o testFluxRelated.o interfaceSpeed.o minmodForVLLim.o meshClass.o configurations.o
+OBJS = fluxRelated.o converter.o interfaceSpeed.o minmodForVLLim.o meshClass.o configurations.o
 CC = g++ 
 CFLAGS = -c -Wall 
 LFLAGS = 
@@ -9,16 +9,16 @@ EIGEN = -I ../dependencies/Eigen/
 PYBIND = -fPIC -I /usr/include/python3.8/ $(python3 -m pybind11 --includes)
 
 
-meshClass.so : meshClass.o
-	$(CC) -Wall -shared -fopenmp $(PYBIND) $(EIGEN) meshClass.o -o meshClass.so
+meshClass.so : meshClass.o configurations.o interfaceSpeed.o fluxRelated.o converter.o minmodForVLLim.o
+	$(CC) -O3 -Wall -shared -fopenmp $(PYBIND) $(EIGEN) $(OBJS) -o meshClass.so
 
-meshClass.o : meshClass.cc meshClass.h fluxRelated.h fluxRelated.cc converter.h converter.cc minmodForVLLim.h minmodForVLLim.cc interfaceSpeed.h interfaceSpeed.cc configurations.cc configurations.h
+meshClass.o : meshClass.cc meshClass.h fluxRelated.h converter.h minmodForVLLim.h interfaceSpeed.h configurations.h
 	$(CC) $(CFLAGS) -fopenmp $(PYBIND) $(EIGEN) meshClass.cc
 
-configurations.o : configurations.cc configurations.h
+configurations.o : configurations.cc configurations.h converter.h
 	$(CC) $(CFLAGS) configurations.cc
 
-interfaceSpeed.o : interfaceSpeed.cc interfaceSpeed.h fluxRelated.cc fluxRelated.h
+interfaceSpeed.o : interfaceSpeed.cc interfaceSpeed.h fluxRelated.h
 	$(CC) $(CFLAGS) $(EIGEN) interfaceSpeed.cc
 
 fluxRelated.o : fluxRelated.cc fluxRelated.h
@@ -33,3 +33,5 @@ minmodForVLLim.o : minmodForVLLim.cc minmodForVLLim.h
 clean : 
 	rm *.o *.so
 
+cleanData : 
+	rm *.csv

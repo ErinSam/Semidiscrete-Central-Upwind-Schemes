@@ -5,6 +5,8 @@
 
 #include <vector>
 
+#include "converter.h"
+
 
 
 void initialConfig(int config, std::vector<double>& I, std::vector<double>& II, 
